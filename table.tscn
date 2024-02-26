@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://du4newbmp1yhh"]
+
+[ext_resource type="Script" path="res://table.gd" id="1_08qqy"]
+[ext_resource type="PackedScene" uid="uid://crkum6arn7pug" path="res://cardUI.tscn" id="2_rlrhw"]
+
+[node name="Table" type="Node2D"]
+script = ExtResource("1_08qqy")
+metadata/_edit_lock_ = true
+
+[node name="DeckLocation" type="Node2D" parent="."]
+position = Vector2(151, 74)
+
+[node name="TopCard" parent="DeckLocation" instance=ExtResource("2_rlrhw")]
+metadata/_edit_lock_ = true
