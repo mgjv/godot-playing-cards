@@ -18,13 +18,19 @@ func _ready():
 	# trigger the setter so display is correct
 	card = card
 
-func flip():
-	if not card:
-		return
-	if back.visible:
+func open():
+	if card:
 		animation_player.play("flip_card")
-	else:
+
+func close():
+	if card:
 		animation_player.play_backwards("flip_card")
+
+func flip():
+	if back.visible:
+		open()
+	else:
+		close()
 
 #func _input(event: InputEvent):
 	#if not card:

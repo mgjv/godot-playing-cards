@@ -1,20 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://du4newbmp1yhh"]
+[gd_scene load_steps=3 format=3 uid="uid://du4newbmp1yhh"]
 
 [ext_resource type="Script" path="res://scenes/table.gd" id="1_08qqy"]
-[ext_resource type="Script" path="res://scenes/deck_ui.gd" id="2_810lx"]
-[ext_resource type="PackedScene" uid="uid://crkum6arn7pug" path="res://scenes/card_ui.tscn" id="2_rlrhw"]
-[ext_resource type="Script" path="res://scenes/deck_ui_bottom.gd" id="4_g85fc"]
+[ext_resource type="PackedScene" uid="uid://dafnn8b8njdkw" path="res://scenes/card_stack_ui.tscn" id="2_64bx6"]
 
 [node name="Table" type="Node2D"]
 script = ExtResource("1_08qqy")
 metadata/_edit_lock_ = true
 
-[node name="DeckUI" type="Node2D" parent="."]
-position = Vector2(1008, 470)
-script = ExtResource("2_810lx")
+[node name="DeckUI" parent="." instance=ExtResource("2_64bx6")]
+position = Vector2(842, 472)
+is_deck = true
 
-[node name="DeckBottom" type="Node2D" parent="DeckUI"]
-script = ExtResource("4_g85fc")
-
-[node name="TopCard" parent="DeckUI" instance=ExtResource("2_rlrhw")]
-metadata/_edit_lock_ = true
+[node name="DiscardPile" parent="." instance=ExtResource("2_64bx6")]
+position = Vector2(983, 471)

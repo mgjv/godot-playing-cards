@@ -1,18 +1,11 @@
 class_name Deck
-extends Resource
+extends CardStack
 
-## Represents a deck of cards.
+## Represents a full deck of cards.
 ##
-## Contains a full set of playing cards
+## Initially contains a full set of playing cards
+## which can then be popped off and added to
 ##
-
-var cards: Array[Card]
-
-var top_card: Card:
-	get:
-		return cards[0]
-	set(c):
-		push_error("Cannot set top card")
 
 func _init():
 	# Iterate over all the suits and values and instantiate cards
@@ -22,5 +15,3 @@ func _init():
 		for value in Card.VALUES.values():
 			cards.append(Card.new(suit, value))
 
-func shuffle():
-	cards.shuffle()
