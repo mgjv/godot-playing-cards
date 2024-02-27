@@ -26,17 +26,6 @@ func flip():
 	else:
 		animation_player.play_backwards("flip_card")
 
-func _input(event: InputEvent):
-	if not card:
-		return
-	if event.is_action_pressed("FLIP") and not animation_player.is_playing():
-		flip()
-		get_viewport().set_input_as_handled()
-	else:
-		if event.is_action_pressed("debug_decrease_value"):
-			card = card.get_previous()
-		elif event.is_action_pressed("debug_increase_value"):
-			card = card.get_next()
-		elif event.is_action_pressed("debug_rotate_suit"):
-			card = card.get_next_suit()
-
+#func _input(event: InputEvent):
+	#if not card:
+		#return

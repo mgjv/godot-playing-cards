@@ -1,6 +1,6 @@
 extends AnimatedSprite2D
 
-# Map the card types to an index in the animations
+# Map the card types to a frame in the animations
 var value_map := {
 	Card.VALUES.ace: 0,
 	Card.VALUES.two: 1,
@@ -17,6 +17,7 @@ var value_map := {
 	Card.VALUES.king: 12,
 }
 
+# Map the suits to an animation
 var suit_map := {
 	Card.SUITS.hearts: "hearts",
 	Card.SUITS.clubs: "clubs",
