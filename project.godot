@@ -11,9 +11,8 @@ config_version=5
 [application]
 
 config/name="Playing Cards Exercise"
-run/main_scene="res://table.tscn"
+run/main_scene="res://scenes/table.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
 
 [display]
 

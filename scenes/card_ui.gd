@@ -12,10 +12,10 @@ var card: Card:
 			front.set_card(card)
 		else:
 			back.visible = true
-		print("SET ", card)
+		#print("SET ", card)
 
 func _ready():
-	# trigger the setter
+	# trigger the setter so display is correct
 	card = card
 
 func flip():
