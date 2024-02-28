@@ -42,7 +42,7 @@ func flip():
 		close()
 
 
-func _process(_delta: float):
+func process(_delta: float):
 	dragdrop.process(_delta)
 
 

@@ -7,7 +7,7 @@ var outline := Rect2i(Vector2i.ZERO, size)
 var centre := size/2
 
 var color = Color.RED - Color.TRANSPARENT/2
-
+	
 func _draw():
 	draw_rect(outline, color, false, 2)
 	if is_deck:
@@ -17,3 +17,4 @@ func _draw():
 		draw_line(centre - offset, centre + offset, color, 15)
 		offset.x *= -1
 		draw_line(centre - offset, centre + offset, color, 15)
+
