@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dafnn8b8njdkw"]
+[gd_scene load_steps=6 format=3 uid="uid://dafnn8b8njdkw"]
 
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="1_a65j1"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui_empty.gd" id="2_toavs"]
 [ext_resource type="PackedScene" uid="uid://crkum6arn7pug" path="res://scenes/card_ui.tscn" id="3_eohb4"]
+[ext_resource type="Script" path="res://scenes/drag_drop_controller.gd" id="3_h0cxv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ormy0"]
 size = Vector2(100, 140)
@@ -20,6 +21,14 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Empty/Area2D"]
 position = Vector2(50, 70)
 shape = SubResource("RectangleShape2D_ormy0")
+
+[node name="DragDropController" type="Control" parent="." node_paths=PackedStringArray("controlled_node")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_h0cxv")
+controlled_node = NodePath("..")
 
 [node name="NextCard" parent="." instance=ExtResource("3_eohb4")]
 metadata/_edit_lock_ = true

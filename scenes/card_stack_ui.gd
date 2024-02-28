@@ -28,4 +28,3 @@ func update_state():
 		top.visible = false
 		
 	next.visible = true if stack.size() > 1 else false
-	

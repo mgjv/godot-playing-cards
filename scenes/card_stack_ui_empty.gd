@@ -17,4 +17,3 @@ func _draw():
 		draw_line(centre - offset, centre + offset, color, 15)
 		offset.x *= -1
 		draw_line(centre - offset, centre + offset, color, 15)
-
