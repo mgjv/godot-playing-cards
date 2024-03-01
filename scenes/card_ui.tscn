@@ -1,7 +1,7 @@
 [gd_scene load_steps=66 format=3 uid="uid://crkum6arn7pug"]
 
 [ext_resource type="Script" path="res://scenes/card_ui.gd" id="1_ha8ee"]
-[ext_resource type="Script" path="res://scenes/drag_drop_controller.gd" id="2_ft1c6"]
+[ext_resource type="Script" path="res://types/drag_drop_controller.gd" id="2_ft1c6"]
 [ext_resource type="Texture2D" uid="uid://cwxemuwbvdtjh" path="res://assets/Color 52 Faces v2.0.png" id="2_p2t3u"]
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_3eoqj"]
 [ext_resource type="Script" path="res://scenes/card_ui_front.gd" id="3_w38r2"]
@@ -490,6 +490,8 @@ script = ExtResource("1_ha8ee")
 [node name="DragDropController" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
 script = ExtResource("2_ft1c6")
 controlled_node = NodePath("..")
+cancel_drag_animation_type = 10
+cancel_drag_animation_duration = 0.25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DragDropController"]
 shape = SubResource("RectangleShape2D_0d1bk")
@@ -510,9 +512,6 @@ libraries = {
 }
 speed_scale = 10.0
 
-[connection signal="click" from="DragDropController" to="." method="_on_drag_drop_controller_click"]
-[connection signal="drag" from="DragDropController" to="." method="_on_drag_drop_controller_drag"]
-[connection signal="drop" from="DragDropController" to="." method="_on_drag_drop_controller_drop"]
-[connection signal="input_event" from="DragDropController" to="DragDropController" method="_on_input_event"]
-[connection signal="mouse_entered" from="DragDropController" to="DragDropController" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="DragDropController" to="DragDropController" method="_on_mouse_exited"]
+[connection signal="click" from="DragDropController" to="." method="_on_ddc_click"]
+[connection signal="drag" from="DragDropController" to="." method="_on_ddc_drag"]
+[connection signal="drop" from="DragDropController" to="." method="_on_ddc_drop"]

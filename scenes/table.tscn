@@ -1,15 +1,79 @@
-[gd_scene load_steps=3 format=3 uid="uid://du4newbmp1yhh"]
+[gd_scene load_steps=9 format=3 uid="uid://du4newbmp1yhh"]
 
-[ext_resource type="Script" path="res://scenes/table.gd" id="1_08qqy"]
-[ext_resource type="PackedScene" uid="uid://dafnn8b8njdkw" path="res://scenes/card_stack_ui.tscn" id="2_64bx6"]
+[ext_resource type="Script" path="res://types/empty_spot.gd" id="3_k7tfe"]
+[ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_mepcl"]
+[ext_resource type="Script" path="res://types/drag_drop_controller.gd" id="3_ne8yl"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_aqs2s"]
+[ext_resource type="Script" path="res://scenes/discard_pile.gd" id="4_wph20"]
+[ext_resource type="Script" path="res://scenes/deck_pile.gd" id="7_nmnyn"]
+[ext_resource type="Script" path="res://scenes/table_top.gd" id="8_82ek7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axg5t"]
+size = Vector2(100, 140)
 
 [node name="Table" type="Node2D"]
-script = ExtResource("1_08qqy")
 metadata/_edit_lock_ = true
 
-[node name="DeckUI" parent="." instance=ExtResource("2_64bx6")]
-position = Vector2(842, 472)
-is_deck = true
+[node name="TestDragDropper" type="Node2D" parent="."]
+position = Vector2(99, 110)
 
-[node name="DiscardPile" parent="." instance=ExtResource("2_64bx6")]
-position = Vector2(983, 471)
+[node name="DragDropController" type="Area2D" parent="TestDragDropper" node_paths=PackedStringArray("controlled_node") groups=["drag_drop_group"]]
+script = ExtResource("3_ne8yl")
+controlled_node = NodePath("..")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestDragDropper/DragDropController"]
+shape = SubResource("RectangleShape2D_axg5t")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="TestDragDropper"]
+texture = ExtResource("3_mepcl")
+metadata/_edit_lock_ = true
+
+[node name="DiscardPile" type="Node2D" parent="."]
+position = Vector2(950, 475)
+script = ExtResource("4_wph20")
+metadata/_edit_lock_ = true
+
+[node name="EmptySpot" type="Node2D" parent="DiscardPile"]
+script = ExtResource("3_k7tfe")
+type = 3
+metadata/_edit_lock_ = true
+
+[node name="DragDropController" type="Area2D" parent="DiscardPile" node_paths=PackedStringArray("controlled_node") groups=["drag_drop_group"]]
+position = Vector2(50, 70)
+script = ExtResource("3_ne8yl")
+controlled_node = NodePath("..")
+is_drop_target = true
+draggable = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DiscardPile/DragDropController"]
+shape = ExtResource("4_aqs2s")
+metadata/_edit_lock_ = true
+
+[node name="DeckPile" type="Node2D" parent="."]
+position = Vector2(825, 475)
+script = ExtResource("7_nmnyn")
+metadata/_edit_lock_ = true
+
+[node name="EmptySpot" type="Node2D" parent="DeckPile"]
+script = ExtResource("3_k7tfe")
+type = 1
+metadata/_edit_lock_ = true
+
+[node name="DragDropController" type="Area2D" parent="DeckPile" node_paths=PackedStringArray("controlled_node") groups=["drag_drop_group"]]
+position = Vector2(50, 70)
+script = ExtResource("3_ne8yl")
+controlled_node = NodePath("..")
+is_drop_target = true
+draggable = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeckPile/DragDropController"]
+shape = ExtResource("4_aqs2s")
+metadata/_edit_lock_ = true
+
+[node name="TableTop" type="Node2D" parent="."]
+z_index = -10
+script = ExtResource("8_82ek7")

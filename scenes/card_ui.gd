@@ -46,16 +46,19 @@ func process(_delta: float):
 	dragdrop.process(_delta)
 
 
-func _on_drag_drop_controller_click():
+func _on_ddc_click():
 	print("Clicked")
+	pass
 
 
-func _on_drag_drop_controller_drag():
+func _on_ddc_drag():
 	print("Drag offset ", dragdrop.offset, ", coming from ", dragdrop.drag_position)
+	pass
 
 
-func _on_drag_drop_controller_drop():
+func _on_ddc_drop():
 	print("Dropped at ", get_global_mouse_position())
 	#global_position = dragdrop.drag_position
 	dragdrop.cancel_drag()
 	
+

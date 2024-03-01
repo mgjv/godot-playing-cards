@@ -16,7 +16,7 @@ func _ready():
 		stack.shuffle()
 	update_state()
 	# This property is meant to be set at design time
-	empty.is_deck = is_deck	
+	#empty.is_deck = is_deck	
 
 ## Based on the contents of the stack, update the 
 ## child nodes
