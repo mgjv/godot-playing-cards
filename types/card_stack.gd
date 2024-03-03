@@ -1,6 +1,8 @@
 class_name CardStack
 extends Resource
 
+# TODO Obsolete, remove
+
 ## Manage a stack of playing cards
 ##
 ## Cards are added at the bottom, "open" (i.e. the front of 

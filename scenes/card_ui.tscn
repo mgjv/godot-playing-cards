@@ -273,7 +273,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"clubs",
-"speed": 5.0
+"speed": 0.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -317,7 +317,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"diamonds",
-"speed": 5.0
+"speed": 0.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -361,7 +361,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"hearts",
-"speed": 5.0
+"speed": 0.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -375,7 +375,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"jokers",
-"speed": 5.0
+"speed": 0.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -419,7 +419,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"spades",
-"speed": 5.0
+"speed": 0.0
 }]
 
 [sub_resource type="Animation" id="Animation_oe7n7"]

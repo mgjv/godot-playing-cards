@@ -1,31 +1,20 @@
 class_name CardStackUI
 extends Node2D
 
-var stack: CardStack = CardStack.new()
+var cardUIScene = preload("res://scenes/card_ui.tscn")
 
-@export var is_deck := false
 
-@onready var top := $TopCard
-@onready var next := $NextCard
-@onready var empty := $Empty
+func add_card(card: Card) -> CardUI:
+	var new_card: CardUI = cardUIScene.instantiate()		
+	new_card.card = card
+	add_child(new_card)
+	return new_card
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	if is_deck:
-		stack = Deck.new()
-		stack.shuffle()
-	update_state()
-	# This property is meant to be set at design time
-	#empty.is_deck = is_deck	
 
-## Based on the contents of the stack, update the 
-## child nodes
-func update_state():
-	if stack.size() > 0:
-		top.card = stack.top_card
-		top.open()
-		top.visible = true 
-	else:
-		top.visible = false
-		
-	next.visible = true if stack.size() > 1 else false
+# Open the top card
+func top_card() -> CardUI:
+	return get_child(-1)
+
+
+func bottom_card() -> CardUI:
+	return get_child(0)

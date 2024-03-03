@@ -1,18 +1,21 @@
 class_name CardUI
 extends Node2D
 
-@onready var front := $Front
-@onready var back := $Back
-@onready var animation_player := $AnimationPlayer
-@onready var dragdrop := $DragDropController
+@onready var front: AnimatedSprite2D = $Front
+@onready var back: Sprite2D = $Back
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var dragdrop: DragDropController = $DragDropController
 
 ## The card that this UI is currently representing
 var card: Card:
 	set(new_card):
 		card = new_card
+		if not is_node_ready():
+			await self.ready
 		if card:
 			front.set_card(card)
 		else:
+			# If the card was open, make sure it's closed again
 			back.visible = true
 		#print("SET ", card)
 
@@ -25,12 +28,16 @@ func _ready():
 ## Show the front of the card
 func open():
 	if card:
+		if not is_node_ready():
+			await self.ready
 		animation_player.play("flip_card")
 
 
 ## Show the backl of the card
 func close():
 	if card:
+		if not is_node_ready():
+			await self.ready
 		animation_player.play_backwards("flip_card")
 
 
@@ -62,3 +69,5 @@ func _on_ddc_drop():
 	dragdrop.cancel_drag()
 	
 
+func _to_string() -> String:
+	return "CardUI(%s)" % card

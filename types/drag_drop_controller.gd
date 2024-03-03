@@ -15,6 +15,7 @@ extends Area2D
 ## items on yours, you need to implement some of these methods
 ##
 ## For any node this is configured to be a drop target
+## 
 ## can_drop(other_node: Node2D) -> bool
 ##
 ##    this method should return true if your node is happy to 
@@ -140,9 +141,9 @@ func _unhandled_input(event):
 
 # Sort function for DragDropControllers. Sorts the top 
 # ddc at the start
-# TODO This should also take Z indexes into account. Probably the one
-# for the controlled node.
-func cmp_ddc(a, b):
+func cmp_ddc(a: DragDropController, b: DragDropController):
+	if a.controlled_node.z_index > b.controlled_node.z_index:
+		return true
 	return a.is_greater_than(b)
 
 
@@ -159,6 +160,7 @@ func on_top() -> bool:
 			.filter( func(node): return node.hovering )
 	dds.sort_custom(cmp_ddc)
 	if dds[0] == self:
+		print("It's me", self)
 		return true
 	return false
 
@@ -223,7 +225,7 @@ func _enter_drop_zone(ddc: DragDropController):
 	if not ddc in drop_targets:
 		drop_targets.append(ddc)
 		drop_targets.sort_custom(cmp_ddc)
-		print("%s set drop target to %s" % [self, drop_target])
+		#print("%s set drop target to %s" % [self, drop_target])
 
 
 func _exit_drop_zone(ddc: DragDropController):
@@ -231,7 +233,7 @@ func _exit_drop_zone(ddc: DragDropController):
 	if not dragging:
 		return
 	drop_targets.erase(ddc)
-	print("%s set drop target to %s" % [self, drop_target])
+	#print("%s set drop target to %s" % [self, drop_target])
 
 
 # These two just exist to map the generic signals from Area2D
@@ -247,18 +249,20 @@ func _on_area_exited(area: Area2D):
 
 # Keep track of when the mouse is hovering over us
 func _mouse_enter():
-	#print("Enter ", controlled_node.name)
+	if draggable:
+		print("Enter %s" % controlled_node)
 	hovering = true
 
 func _mouse_exit():
-	#print("Exit ", controlled_node.name)
+	if draggable:
+		print("Exit %s" % controlled_node)
 	hovering = false
 
 
 func _to_string() -> String:
 	# Node.name is type StringName not String
 	var cname: String = controlled_node.name if controlled_node else &"<null>"
-	return "DDC{%s}" % cname
+	return "DragDropController{%s}" % cname
 
 
 func _get_configuration_warnings():

@@ -6,6 +6,7 @@ extends Node2D
 		color = c
 		queue_redraw()
 
+
 func _draw():
 	var rect := get_viewport_rect()
 	draw_rect(rect, color, true)

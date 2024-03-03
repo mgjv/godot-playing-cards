@@ -12,7 +12,7 @@ enum SUITS {
 }
 
 enum VALUES {
-	ace = 0,
+	ace = 1,
 	two, three, four, five, six, seven, eight, nine, ten,
 	jack, queen, king,
 }
@@ -25,4 +25,4 @@ func _init(s: SUITS, v: VALUES):
 	value = v
 
 func _to_string() -> String:
-	return VALUES.keys()[value] + " of " + SUITS.keys()[suit]
+	return VALUES.keys()[value - VALUES.ace] + " of " + SUITS.keys()[suit]
