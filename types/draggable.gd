@@ -1,26 +1,14 @@
 @tool
-class_name DragDropController
+class_name Draggable
 extends Area2D
 
-## Handle input events related to mouse movement
+## Handle dragging for any Node2D
 ##
-## Specifically control clicking, dragging and dropping
-## abstractions
+## Add this as a child for a node you want to be draggable. Configure the 
+## [member Draggable.controlled_node] to indicate which node you want
+## to be the one that gets moved and can be dropped on a [Droppable].
 ##
-## Add this as a child for a node you want to be draggable
-## and/or a drop target. Configure the DragDropController
-## with this node, and some other options. 
-##
-## To interat with the dropping of other DragDropController 
-## items on yours, you need to implement some of these methods
-##
-## For any node this is configured to be a drop target
-## 
-## can_drop(other_node: Node2D) -> bool
-##
-##    this method should return true if your node is happy to 
-##    receive a drop of the other_node
-##
+## Also see [Droppable]
 
 ## The node that will be used to implement the drag
 ## move and animations. If you don't set this, you will
@@ -30,10 +18,8 @@ extends Area2D
 		controlled_node = n
 		update_configuration_warnings()
 
-## Is this a drop target?
-@export var is_drop_target := false
 ## Is this a draggable item?
-@export var draggable := true
+@export var active := true
 ## Is this a clickable item?
 @export var clickable := true
 
@@ -51,12 +37,14 @@ signal click
 ## position. This can be used to implement following the mouse
 signal drag
 
+# TODO This signal should include the item dropped and the draggable
+
 # emitted when the item is dropped
 signal drop
 
 # The group we use to identify these nodes
 # Things will break if someone else uses the same group name
-const GROUP = "drag_drop_group"
+const GROUP = "draggable_group"
 
 ## tracks whether the mouse button is pressed.
 ## you probably don't need to look at this, ever.
@@ -76,13 +64,6 @@ var offset := Vector2.ZERO
 ## orignally was before dragging
 var drag_position := Vector2.ZERO
 
-# All current possible drop targets
-var drop_targets : Array[DragDropController] = []
-# And the currently selected drop target, which is reall
-var drop_target : DragDropController:
-	get:
-		return drop_targets[0] if drop_targets else null
-
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -90,9 +71,6 @@ func _ready():
 
 	# Add ourselves to pur group
 	add_to_group(GROUP, true)
-	
-	area_entered.connect(_on_area_entered)
-	area_exited.connect(_on_area_exited)
 
 
 # Update position while dragging
@@ -139,28 +117,15 @@ func _unhandled_input(event):
 		cancel_drag()
 
 
-# Sort function for DragDropControllers. Sorts the top 
-# ddc at the start
-func cmp_ddc(a: DragDropController, b: DragDropController):
-	if a.controlled_node.z_index > b.controlled_node.z_index:
-		return true
-	return a.is_greater_than(b)
+# TODO See shape_clicker.gd for a possible different approach
 
-
-# TODO Make on_top() more efficient by caching the result
-# Cache should be invalidated when the tree changes (three signals in get_tree()
-# or when something is added to the group or removed from it (which should never happen!)
-# Howver, this does not eseem possible to be notified of.
-
-# TODO See shape_clicker for a possible different approach
-
-# Of all the DragDropControllers under the mouse, am I the top one?
+# Of all the Draggables under the mouse, am I the top one?
 func on_top() -> bool:
-	var dds: Array[Node] = get_tree().get_nodes_in_group(GROUP) \
+	var draggables: Array[Node] = get_tree().get_nodes_in_group(GROUP) \
 			.filter( func(node): return node.hovering )
-	dds.sort_custom(cmp_ddc)
-	if dds[0] == self:
-		print("It's me", self)
+	draggables.sort_custom(Util.cmp_nodes_by_overlap)
+	if draggables[0] == self:
+		#print("%s is on top" % self)
 		return true
 	return false
 
@@ -171,12 +136,14 @@ func _detect_click():
 
 
 func _drop():
+	# FIXME: Should this be done by listening to the signal instead?
+	Droppable.process_drop(self)
 	drop.emit()
 	dragging = false
 
 
 func _start_drag():
-	if not draggable:
+	if not active:
 		return
 	offset = get_global_mouse_position() - controlled_node.global_position
 	drag_position = controlled_node.global_position
@@ -196,73 +163,24 @@ func cancel_drag():
 		tween.set_trans(cancel_drag_animation_type)
 		tween.tween_property(controlled_node, "global_position", drag_position, cancel_drag_animation_duration)
 		await tween.finished
-		
-
-## Determine whether this DragDropController can receive
-## the given item from a drop. This uses the configuration
-## of this DragDropController, and the logic possibly implemented 
-## in the can_drop() method of the controlled node
-func can_receive(other_ddc: DragDropController) -> bool:
-	if not is_drop_target:
-		return false
-	# If there is no controlled node, just use 
-	if not controlled_node.has_method("can_drop"):
-		return is_drop_target
-		
-	return controlled_node.can_drop(other_ddc.controlled_node)
-
-
-
-func _enter_drop_zone(ddc: DragDropController):
-	# Only process this in the node that is being dragged
-	if not dragging:
-		return
-	# If the other node cannot reeive this drop, return
-	if not ddc.can_receive(self):
-		return
-	# Add the other node to the list of possible targets
-	# Make sure the drop targets are in sorted order
-	if not ddc in drop_targets:
-		drop_targets.append(ddc)
-		drop_targets.sort_custom(cmp_ddc)
-		#print("%s set drop target to %s" % [self, drop_target])
-
-
-func _exit_drop_zone(ddc: DragDropController):
-	# Only process this in the node that is being dragged
-	if not dragging:
-		return
-	drop_targets.erase(ddc)
-	#print("%s set drop target to %s" % [self, drop_target])
-
-
-# These two just exist to map the generic signals from Area2D
-# to typed calls for DragDropController
-func _on_area_entered(area: Area2D):
-	if area is DragDropController:
-		_enter_drop_zone(area as DragDropController)
-
-func _on_area_exited(area: Area2D):
-	if area is DragDropController:
-		_exit_drop_zone(area as DragDropController)
 
 
 # Keep track of when the mouse is hovering over us
 func _mouse_enter():
-	if draggable:
-		print("Enter %s" % controlled_node)
-	hovering = true
+	if active:
+		hovering = true
+		#print("Hovering over %s" % controlled_node)
 
 func _mouse_exit():
-	if draggable:
-		print("Exit %s" % controlled_node)
-	hovering = false
+	if active:
+		hovering = false
+		#print("Hovering over %s" % controlled_node)
 
 
 func _to_string() -> String:
 	# Node.name is type StringName not String
 	var cname: String = controlled_node.name if controlled_node else &"<null>"
-	return "DragDropController{%s}" % cname
+	return "Draggable{%s}" % cname
 
 
 func _get_configuration_warnings():

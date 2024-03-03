@@ -14,20 +14,20 @@ func new_deck():
 	
 	for card_value in deck.cards:
 		var new_card := stack.add_card(card_value)
-		new_card.dragdrop.draggable = false
-		new_card.dragdrop.is_drop_target = false
+		# TODO This is too intimate
+		new_card.draggable.active = false
 		# FIXME DEBUG
 		#new_card.front.position.x -= 15 * stack.get_child_count()
 		#new_card.back.position.x -= 15 * stack.get_child_count()
 		#new_card.back.position.y -= 50
 
 func show_top_card():
-	var top_card := stack.top_card()
+	var top_card: CardUI = stack.top_card()
 	if top_card:
 		print("Opening on top card %s" % top_card )
 		top_card.open()
-		top_card.dragdrop.draggable = true
+		# TODO This is too intimate
+		top_card.draggable.active = true
 	else:
 		print("whoops, The deck is empty")
 
-	#stack.bottom_card().open()

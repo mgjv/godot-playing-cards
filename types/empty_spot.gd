@@ -6,6 +6,7 @@ enum TYPE {
 	none,
 	circle,
 	cross,
+	plus,
 	square,
 }
 
@@ -45,6 +46,11 @@ func _draw():
 			draw_line(centre - offset, centre + offset, color, line_width)
 			offset.x *= -1
 			draw_line(centre - offset, centre + offset, color, line_width)
+		TYPE.plus:
+			var offset := Vector2i.UP * size/2
+			draw_line(centre - offset, centre + offset, color, line_width)
+			offset = Vector2i.RIGHT * size/2
+			draw_line(centre - offset, centre + offset, color, line_width)			
 		TYPE.square:
 			var square_size := Vector2i.ONE * size
 			var square := Rect2i(centre - square_size/2, square_size)

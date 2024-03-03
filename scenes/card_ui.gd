@@ -4,7 +4,7 @@ extends Node2D
 @onready var front: AnimatedSprite2D = $Front
 @onready var back: Sprite2D = $Back
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var dragdrop: DragDropController = $DragDropController
+@onready var draggable: Draggable = $Draggable
 
 ## The card that this UI is currently representing
 var card: Card:
@@ -49,24 +49,20 @@ func flip():
 		close()
 
 
-func process(_delta: float):
-	dragdrop.process(_delta)
-
-
-func _on_ddc_click():
+func _on_draggable_click():
 	print("Clicked")
 	pass
 
 
-func _on_ddc_drag():
-	print("Drag offset ", dragdrop.offset, ", coming from ", dragdrop.drag_position)
+func _on_draggable_drag():
+	print("Drag offset ", draggable.offset, ", coming from ", draggable.drag_position)
 	pass
 
 
-func _on_ddc_drop():
+func _on_draggable_drop():
 	print("Dropped at ", get_global_mouse_position())
 	#global_position = dragdrop.drag_position
-	dragdrop.cancel_drag()
+	draggable.cancel_drag()
 	
 
 func _to_string() -> String:
