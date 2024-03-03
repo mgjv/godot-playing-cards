@@ -10,9 +10,13 @@ extends Area2D
 ## If you want to be able to control which nodes can de dropped, define a method 
 ## with signature [code]_can_receive_drop(node: Node2D) -> bool[/code]. 
 ## The [param node] patameter will be the [member Draggable.controlled_node]
-## member you defined on that side.
+## member you defined on that side. Return true if you're willing and able to accept
+## a drop of the given item.
 ## 
-## To process any drops, connect to the [signal Droppable.received_drop].
+## To process the actual drop, connect to the [signal Droppable.received_drop].
+##
+## Note that the assumption is that if [code]can_receive()[/code] returned true
+## that you will handle any further movement of the dropped item.
 ##
 ## Also see [Draggable] for the other half of the story.
 
@@ -27,7 +31,22 @@ extends Area2D
 ## Are we actively listening for drops
 @export var active := true
 
-## emitted when something is dropped
+## Whether to align the dropped item with this drop target 
+## when dropped. 
+##
+## Set this to false if you want to handle the 
+## alignment animation yourself.
+##
+## This provides symmetry for the case where a Draggable is dropped
+## outside of a suitable target (which wil autmatically move it back
+## to where it was picked up).
+##
+## Note that the dropped item remains in the same place in the scene tree.
+## You need to handle that stuff yourself by implementing a handler
+## for [signal Droppable.received_drop]
+@export var align_dropped_item := true
+
+## Emitted when something is dropped
 ##
 ## The payload is the conrolled node of the drag controller
 signal received_drop(node: Node2D)
@@ -46,11 +65,6 @@ static var drop_target : Droppable:
 	get:
 		return drop_targets[0] if drop_targets else null
 
-## Called by a draggable when it is dropped
-static func process_drop(draggable: Draggable):
-	if drop_targets:
-		drop_target._receive_drop(draggable)
-		
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -86,8 +100,10 @@ func can_receive(draggable: Draggable) -> bool:
 	return controlled_node._can_receive_drop(draggable.controlled_node)
 
 
-## Called when a drop is received 
-func _receive_drop(draggable: Draggable):
+# Called when a drop is received 
+func receive_drop(draggable: Draggable):
+	if align_dropped_item:
+		draggable.move_to(controlled_node.global_position)
 	received_drop.emit(draggable.controlled_node)
 	#print("%s is receiving drop from %s" % [self, draggable])
 
@@ -104,14 +120,16 @@ func _enter_drop_zone(draggable: Draggable):
 	if not self in drop_targets:
 		drop_targets.append(self)
 		drop_targets.sort_custom(Util.cmp_nodes_by_overlap)
+		draggable.drop_target = drop_target
 		#print("Drop target set to %s (out of %d)" % [drop_target, drop_targets.size()])
 
 
-func _exit_drop_zone(_draggable: Draggable):
+func _exit_drop_zone(draggable: Draggable):
 	# Only process this in the node that is being dragged
 	if not active:
 		return
 	drop_targets.erase(self)
+	draggable.drop_target = drop_target
 	#print("Drop target set to %s (out of %d)" % [drop_target, drop_targets.size()])
 
 
@@ -130,6 +148,7 @@ func _to_string() -> String:
 	# Node.name is type StringName not String
 	var cname: String = controlled_node.name if controlled_node else &"<null>"
 	return "Droppable{%s}" % cname
+
 
 func _get_configuration_warnings():
 	var warnings = []

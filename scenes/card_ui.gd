@@ -54,16 +54,25 @@ func _on_draggable_click():
 	pass
 
 
-func _on_draggable_drag():
-	print("Drag offset ", draggable.offset, ", coming from ", draggable.drag_position)
-	pass
+func scale_card(new_scale: float):
+	var tween = get_tree().create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(self, "scale", new_scale * Vector2.ONE, .25)
+
+
+func _on_draggable_start_drag():
+	scale_card(1.2)
+	#print("%s starting drag" % self)
+
+	
+func _on_draggable_stop_drag():
+	scale_card(1.0)
+	#print("%s stopping drag" % self)
 
 
 func _on_draggable_drop():
 	print("Dropped at ", get_global_mouse_position())
-	#global_position = dragdrop.drag_position
-	draggable.cancel_drag()
-	
+
 
 func _to_string() -> String:
 	return "CardUI(%s)" % card

@@ -5,9 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cwxemuwbvdtjh" path="res://assets/Color 52 Faces v2.0.png" id="2_p2t3u"]
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_3eoqj"]
 [ext_resource type="Script" path="res://scenes/card_ui_front.gd" id="3_w38r2"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0d1bk"]
-size = Vector2(100, 140)
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="3_wdxe4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lf5hr"]
 atlas = ExtResource("2_p2t3u")
@@ -484,23 +482,27 @@ _data = {
 }
 
 [node name="CardUI" type="Node2D"]
-position = Vector2(50, 70)
 script = ExtResource("1_ha8ee")
 
 [node name="Draggable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
+position = Vector2(50, 70)
 script = ExtResource("2_56qcl")
 controlled_node = NodePath("..")
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Draggable"]
-shape = SubResource("RectangleShape2D_0d1bk")
+shape = ExtResource("3_wdxe4")
+metadata/_edit_lock_ = true
 
 [node name="Front" type="AnimatedSprite2D" parent="."]
+position = Vector2(50, 70)
 sprite_frames = SubResource("SpriteFrames_cg6vg")
 animation = &"spades"
 script = ExtResource("3_w38r2")
 metadata/_edit_lock_ = true
 
 [node name="Back" type="Sprite2D" parent="."]
+position = Vector2(50, 70)
 texture = ExtResource("3_3eoqj")
 metadata/_edit_lock_ = true
 
@@ -511,5 +513,6 @@ libraries = {
 speed_scale = 10.0
 
 [connection signal="click" from="Draggable" to="." method="_on_draggable_click"]
-[connection signal="drag" from="Draggable" to="." method="_on_draggable_drag"]
 [connection signal="drop" from="Draggable" to="." method="_on_draggable_drop"]
+[connection signal="start_drag" from="Draggable" to="." method="_on_draggable_start_drag"]
+[connection signal="stop_drag" from="Draggable" to="." method="_on_draggable_stop_drag"]

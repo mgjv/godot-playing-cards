@@ -8,6 +8,11 @@ extends Area2D
 ## [member Draggable.controlled_node] to indicate which node you want
 ## to be the one that gets moved and can be dropped on a [Droppable].
 ##
+## This component will handle much of the normal movement, animations and 
+## reactions associated with dragging and dropping, including 
+## returning an item to its original position when dropped without a 
+## target that can accept it.
+##
 ## Also see [Droppable]
 
 ## The node that will be used to implement the drag
@@ -26,16 +31,17 @@ extends Area2D
 ## Control the type and length of the animation for cancellation of a drag
 ## See the documentation for [Tween]
 @export var cancel_drag_animation_type: Tween.TransitionType
-@export_range(0.0, 1.5, 0.05) var cancel_drag_animation_duration: float = 0.5
+@export_range(0.0, 1.5, 0.05) var cancel_drag_animation_duration: float = 0.25
 
 ## Emitted when a full click has occured
 signal click
 
-## emitted at the start of a dragging operation
+## emitted at the start and end of a dragging operation
 ##
 ## The parameter offset is the offset of the click to the (0,0)
 ## position. This can be used to implement following the mouse
-signal drag
+signal start_drag
+signal stop_drag
 
 # TODO This signal should include the item dropped and the draggable
 
@@ -63,6 +69,10 @@ var offset := Vector2.ZERO
 ## This is the position the controlled node
 ## orignally was before dragging
 var drag_position := Vector2.ZERO
+
+## This is the current drop target
+## This is managed by the Droppable class entirely
+var drop_target : Droppable
 
 
 func _ready():
@@ -137,9 +147,15 @@ func _detect_click():
 
 func _drop():
 	# FIXME: Should this be done by listening to the signal instead?
-	Droppable.process_drop(self)
-	drop.emit()
+	#Droppable.process_drop(self)
 	dragging = false
+	mouse_down = false
+	stop_drag.emit()
+	drop.emit()
+	if drop_target:
+		drop_target.receive_drop(self)
+	else:
+		cancel_drag()
 
 
 func _start_drag():
@@ -148,21 +164,26 @@ func _start_drag():
 	offset = get_global_mouse_position() - controlled_node.global_position
 	drag_position = controlled_node.global_position
 	dragging = true
-	drag.emit()
+	start_drag.emit()
 
 
 ## Call this to cancel the drag (for example if the drop happens
 ## in a non-interesting area.
 func cancel_drag():
 	# Stop following the mouse, and rest click state
+	if dragging:
+		stop_drag.emit()
 	dragging = false
 	mouse_down = false
 	# Return the item to its start position
 	if controlled_node:
-		var tween = get_tree().create_tween()
-		tween.set_trans(cancel_drag_animation_type)
-		tween.tween_property(controlled_node, "global_position", drag_position, cancel_drag_animation_duration)
-		await tween.finished
+		move_to(drag_position)
+
+
+func move_to(pos: Vector2):
+	var tween = get_tree().create_tween()
+	tween.set_trans(cancel_drag_animation_type)
+	tween.tween_property(controlled_node, "global_position", pos, cancel_drag_animation_duration)
 
 
 # Keep track of when the mouse is hovering over us

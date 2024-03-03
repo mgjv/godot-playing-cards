@@ -14,7 +14,6 @@ metadata/_edit_lock_ = true
 [node name="DiscardPile" type="Node2D" parent="."]
 position = Vector2(950, 475)
 script = ExtResource("4_wph20")
-metadata/_edit_lock_ = true
 
 [node name="Droppable" type="Area2D" parent="DiscardPile" node_paths=PackedStringArray("controlled_node")]
 script = ExtResource("3_81v0j")
@@ -38,7 +37,6 @@ metadata/_edit_lock_ = true
 [node name="DeckPile" type="Node2D" parent="."]
 position = Vector2(825, 475)
 script = ExtResource("7_nmnyn")
-metadata/_edit_lock_ = true
 
 [node name="Droppable" type="Area2D" parent="DeckPile" node_paths=PackedStringArray("controlled_node")]
 script = ExtResource("3_81v0j")
@@ -64,3 +62,5 @@ metadata/_edit_lock_ = true
 z_index = -10
 script = ExtResource("8_82ek7")
 metadata/_edit_lock_ = true
+
+[connection signal="received_drop" from="DiscardPile/Droppable" to="DiscardPile" method="_on_droppable_received_drop"]
