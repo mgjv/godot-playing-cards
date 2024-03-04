@@ -21,7 +21,6 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DiscardPile/Droppable"]
-position = Vector2(50, 70)
 shape = ExtResource("4_aqs2s")
 metadata/_edit_lock_ = true
 
@@ -44,7 +43,6 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeckPile/Droppable"]
-position = Vector2(50, 70)
 shape = ExtResource("4_aqs2s")
 metadata/_edit_lock_ = true
 

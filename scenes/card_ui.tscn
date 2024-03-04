@@ -485,7 +485,6 @@ _data = {
 script = ExtResource("1_ha8ee")
 
 [node name="Draggable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
-position = Vector2(50, 70)
 script = ExtResource("2_56qcl")
 controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
@@ -495,14 +494,12 @@ shape = ExtResource("3_wdxe4")
 metadata/_edit_lock_ = true
 
 [node name="Front" type="AnimatedSprite2D" parent="."]
-position = Vector2(50, 70)
 sprite_frames = SubResource("SpriteFrames_cg6vg")
 animation = &"spades"
 script = ExtResource("3_w38r2")
 metadata/_edit_lock_ = true
 
 [node name="Back" type="Sprite2D" parent="."]
-position = Vector2(50, 70)
 texture = ExtResource("3_3eoqj")
 metadata/_edit_lock_ = true
 

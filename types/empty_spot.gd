@@ -30,10 +30,11 @@ enum TYPE {
 	set(v):
 		color = v
 		queue_redraw()
- 
+
+var centre := Vector2i.ZERO
 var overall_size := Vector2i(100, 140)
-var outline := Rect2i(Vector2i.ZERO, overall_size)
-var centre := overall_size/2
+var top_left := centre - overall_size/2
+var outline := Rect2i(top_left, overall_size)
 
 func _draw():
 	#print("Drawing")
@@ -56,8 +57,3 @@ func _draw():
 			var square := Rect2i(centre - square_size/2, square_size)
 			draw_rect(square, color, false, line_width)
 
-# Uncomment this if you want to see the thing update in realtime
-# in the editor
-#func _process(_delta):
-	#if Engine.is_editor_hint():
-		#queue_redraw()

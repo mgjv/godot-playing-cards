@@ -1,6 +1,6 @@
 @tool
 class_name Draggable
-extends Area2D
+extends Hoverable
 
 ## Handle dragging for any Node2D
 ##
@@ -15,23 +15,17 @@ extends Area2D
 ##
 ## Also see [Droppable]
 
-## The node that will be used to implement the drag
-## move and animations. If you don't set this, you will
-## have to handle drag movements yourself
 @export var controlled_node : Node2D:
-	set(n):
-		controlled_node = n
+	set(node):
+		controlled_node = node
 		update_configuration_warnings()
 
-## Is this a draggable item?
 @export var active := true
-## Is this a clickable item?
-@export var clickable := true
 
 ## Control the type and length of the animation for cancellation of a drag
 ## See the documentation for [Tween]
-@export var cancel_drag_animation_type: Tween.TransitionType
-@export_range(0.0, 1.5, 0.05) var cancel_drag_animation_duration: float = 0.25
+@export var move_animation_type: Tween.TransitionType
+@export_range(0.0, 1.5, 0.05) var move_animation_duration: float = 0.25
 
 ## Emitted when a full click has occured
 signal click
@@ -59,9 +53,6 @@ var mouse_down := false
 ## Indicates whether the item is currently being dragged
 var dragging := false
 
-## Indicates whether the mouse is over the item
-var hovering := false
-
 ## The offset of the initial click to the position
 ## of the Controlled Node
 var offset := Vector2.ZERO
@@ -81,7 +72,7 @@ func _ready():
 
 	# Add ourselves to pur group
 	add_to_group(GROUP, true)
-
+	
 
 # Update position while dragging
 func _process(_delta: float):
@@ -89,7 +80,7 @@ func _process(_delta: float):
 		return
 
 	if dragging:
-		controlled_node.global_position = get_global_mouse_position() - offset
+		self.controlled_node.global_position = get_global_mouse_position() - offset
 
 
 # Process mouse events we're interested in
@@ -99,50 +90,30 @@ func _input_event(_viewport, event, _shape_idx):
 		_start_drag()
 		return
 	
-	# For performance reasons we do not process any 
-	# Mouse motion after this line
+	# For performance reasons we do not process any mouse motion after this line
 	if event is InputEventMouseMotion:
 		return
 	
 	# If we're not the top node in our group, we don't
 	# want to process 
-	if not on_top():
-		return
+	#if not on_top(GROUP):
+	#	return
 		
 	# Process mouse buttons
 	if event is InputEventMouseButton:
 		if event.pressed:
-			mouse_down = true  
-		else: 
+			if on_top(GROUP):
+				mouse_down = true  
+		else:
 			mouse_down = false
 			if dragging:
 				_drop()
-			else:
-				_detect_click()
 
 
 # Process keys that we're interested in
 func _unhandled_input(event):
 	if dragging and event.is_action_pressed("ui_cancel"):
 		cancel_drag()
-
-
-# TODO See shape_clicker.gd for a possible different approach
-
-# Of all the Draggables under the mouse, am I the top one?
-func on_top() -> bool:
-	var draggables: Array[Node] = get_tree().get_nodes_in_group(GROUP) \
-			.filter( func(node): return node.hovering )
-	draggables.sort_custom(Util.cmp_nodes_by_overlap)
-	if draggables[0] == self:
-		#print("%s is on top" % self)
-		return true
-	return false
-
-
-func _detect_click():
-	if clickable:
-		click.emit()
 
 
 func _drop():
@@ -154,6 +125,7 @@ func _drop():
 	drop.emit()
 	if drop_target:
 		drop_target.receive_drop(self)
+		drop_target = null
 	else:
 		cancel_drag()
 
@@ -161,8 +133,8 @@ func _drop():
 func _start_drag():
 	if not active:
 		return
-	offset = get_global_mouse_position() - controlled_node.global_position
-	drag_position = controlled_node.global_position
+	offset = get_global_mouse_position() - self.controlled_node.global_position
+	drag_position = self.controlled_node.global_position
 	dragging = true
 	start_drag.emit()
 
@@ -176,37 +148,23 @@ func cancel_drag():
 	dragging = false
 	mouse_down = false
 	# Return the item to its start position
-	if controlled_node:
+	if self.controlled_node:
 		move_to(drag_position)
 
 
 func move_to(pos: Vector2):
-	var tween = get_tree().create_tween()
-	tween.set_trans(cancel_drag_animation_type)
-	tween.tween_property(controlled_node, "global_position", pos, cancel_drag_animation_duration)
-
-
-# Keep track of when the mouse is hovering over us
-func _mouse_enter():
-	if active:
-		hovering = true
-		#print("Hovering over %s" % controlled_node)
-
-func _mouse_exit():
-	if active:
-		hovering = false
-		#print("Hovering over %s" % controlled_node)
+	var tween: Tween = get_tree().create_tween()
+	tween.set_trans(move_animation_type)
+	tween.tween_property(self.controlled_node, "global_position", pos, move_animation_duration)
 
 
 func _to_string() -> String:
 	# Node.name is type StringName not String
-	var cname: String = controlled_node.name if controlled_node else &"<null>"
+	var cname: String = self.controlled_node.name if self.controlled_node else &"<null>"
 	return "Draggable{%s}" % cname
-
 
 func _get_configuration_warnings():
 	var warnings = []
 	if !controlled_node:
 		warnings.append("A controlled node needs to be set.\nMost likely you want to select the parent node.")
 	return warnings
-	

@@ -56,23 +56,15 @@ signal received_drop(node: Node2D)
 const GROUP = "droppable_group"
 
 
-# The assumption is that there is ever one active draggabl;e
-# at any time.
-# These three variables track which of the droppables are currently
-# possible targets, 
-static var drop_targets : Array[Droppable] = []
-static var drop_target : Droppable:
-	get:
-		return drop_targets[0] if drop_targets else null
-
-
 func _ready():
 	if Engine.is_editor_hint():
 		return
-
-	# Add ourselves to pur group
-	add_to_group(GROUP, true)
 	
+	# Add ourselves to pur group and the global; list of droppables
+	add_to_group(GROUP, true)
+	_all_droppables.append(self)
+
+	# Connect to the detection signals
 	area_entered.connect(_on_area_entered)
 	area_exited.connect(_on_area_exited)
 
@@ -100,37 +92,49 @@ func can_receive(draggable: Draggable) -> bool:
 	return controlled_node._can_receive_drop(draggable.controlled_node)
 
 
+# All currently active droppables
+static var _all_droppables: Array[Droppable]
+# The draggables that are currently on this droppable
+var _draggables: Array[Draggable]
+
+
+static func _set_drop_target(draggable: Draggable):
+	var droppables := _all_droppables.filter(
+			func(d: Droppable): return d.active and draggable in d._draggables
+		)
+	droppables.sort_custom(Util.cmp_render_order)
+	draggable.drop_target = droppables[0] if droppables else null
+	#print("Drop target set to %s (out of %d)" % [draggable.drop_target, droppables.size()])
+
+
 # Called when a drop is received 
 func receive_drop(draggable: Draggable):
+	if not active:
+		# TODO This should of course never happen
+		push_error("Item dropped on inactive %s" % self)
+		return
 	if align_dropped_item:
 		draggable.move_to(controlled_node.global_position)
 	received_drop.emit(draggable.controlled_node)
 	#print("%s is receiving drop from %s" % [self, draggable])
 
 
+## Called when a [Draggable] enters this [Droppable]
 func _enter_drop_zone(draggable: Draggable):
-	# Only process this in the node that is being dragged
 	if not active:
 		return
-	# If the other node cannot reeive this drop, return
+	# If we cannot reeive this drop, return
 	if not can_receive(draggable):
 		return
-	# Add ourselves to the list of possible targets
-	# Make sure the drop targets are in sorted order
-	if not self in drop_targets:
-		drop_targets.append(self)
-		drop_targets.sort_custom(Util.cmp_nodes_by_overlap)
-		draggable.drop_target = drop_target
-		#print("Drop target set to %s (out of %d)" % [drop_target, drop_targets.size()])
+	_draggables.append(draggable)
+	Droppable._set_drop_target(draggable)
 
-
+## Called when a [Draggable] leaves this [Droppable]
 func _exit_drop_zone(draggable: Draggable):
-	# Only process this in the node that is being dragged
 	if not active:
 		return
-	drop_targets.erase(self)
-	draggable.drop_target = drop_target
-	#print("Drop target set to %s (out of %d)" % [drop_target, drop_targets.size()])
+	_draggables.erase(draggable)
+	Droppable._set_drop_target(draggable)
 
 
 # These two just exist to map the generic signals from Area2D
@@ -150,9 +154,4 @@ func _to_string() -> String:
 	return "Droppable{%s}" % cname
 
 
-func _get_configuration_warnings():
-	var warnings = []
-	if !controlled_node:
-		warnings.append("A controlled node needs to be set.\nMost likely you want to select the parent node.")
-	return warnings
 	
