@@ -39,7 +39,6 @@ func _ready():
 	add_to_group(GROUP, true)
 
 
-
 # Process mouse events we're interested in
 func _input_event(_viewport, event, _shape_idx):
 	# If the mouse button is down and we move, cancel the click
@@ -67,6 +66,7 @@ func _input_event(_viewport, event, _shape_idx):
 
 func _detect_click():
 	if active:
+		print("%s clicked" % self)
 		click.emit()
 
 

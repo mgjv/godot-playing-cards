@@ -1,9 +1,18 @@
 extends Node2D
 
-func _on_droppable_received_drop(node: Node2D):
-	print("%s should not have received %s" % [self.name, node.name])
+@onready var empty_spot: EmptySpot = $EmptySpot
+@onready var droppable: Droppable = $Droppable
 
+
+func _on_droppable_received_drop(node: Node2D):
+	var affirm = "" if droppable.active else " should not have"
+	print("%s%s received %s" % [self.name, affirm, node.name])
+	
 
 func _on_clickable_click():
-	print("Clicked on %s" % self.name)
-	pass # Replace with function body.
+	if droppable.active:
+		droppable.active = false
+		empty_spot.color = Color.WEB_GRAY
+	else:
+		droppable.active = true
+		empty_spot.color = Color.WEB_GREEN

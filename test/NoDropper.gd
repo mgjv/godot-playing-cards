@@ -8,3 +8,4 @@ func _can_receive_drop(_node: Node2D) -> bool:
 func _on_droppable_received_drop(_node: Node2D):
 	print("%s received %s" % [self.name, _node.name])
 	pass
+

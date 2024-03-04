@@ -510,6 +510,5 @@ libraries = {
 speed_scale = 10.0
 
 [connection signal="click" from="Draggable" to="." method="_on_draggable_click"]
-[connection signal="drop" from="Draggable" to="." method="_on_draggable_drop"]
 [connection signal="start_drag" from="Draggable" to="." method="_on_draggable_start_drag"]
 [connection signal="stop_drag" from="Draggable" to="." method="_on_draggable_stop_drag"]

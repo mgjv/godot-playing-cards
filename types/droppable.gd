@@ -46,10 +46,22 @@ extends Area2D
 ## for [signal Droppable.received_drop]
 @export var align_dropped_item := true
 
+## Whether to automatically add a DroppableUI node
+##
+## This will add DroppableUI animations to the droppable
+## with the default settings. If you want to control the settings
+## yourself, explicitly create the node, and configure it.
+@export var add_ui := true
+
 ## Emitted when something is dropped
 ##
 ## The payload is the conrolled node of the drag controller
 signal received_drop(node: Node2D)
+
+## Emitted when this node is selected as a drop target
+signal targeted
+## Emitted when this node is no longer selected as a drop target
+signal untargeted
 
 # The group we use to identify these nodes
 # Things will break if someone else uses the same group name
@@ -67,6 +79,12 @@ func _ready():
 	# Connect to the detection signals
 	area_entered.connect(_on_area_entered)
 	area_exited.connect(_on_area_exited)
+	
+	# Add a DraggableUI node if requested, and if we don't already have one
+	if add_ui and not get_children().filter(func(n): return n is DroppableUI):
+		var droppable_ui = DroppableUI.new()
+		add_child(droppable_ui)
+
 
 
 # TODO We need drop animation/indication
@@ -103,7 +121,13 @@ static func _set_drop_target(draggable: Draggable):
 			func(d: Droppable): return d.active and draggable in d._draggables
 		)
 	droppables.sort_custom(Util.cmp_render_order)
-	draggable.drop_target = droppables[0] if droppables else null
+	var new_drop_target: Droppable = droppables[0] if droppables else null
+	# Notify listeners of any targeting changes
+	if draggable.drop_target and draggable.drop_target != new_drop_target:
+		draggable.drop_target.untargeted.emit()
+	if new_drop_target and draggable.drop_target != new_drop_target:
+		new_drop_target.targeted.emit()
+	draggable.drop_target = new_drop_target
 	#print("Drop target set to %s (out of %d)" % [draggable.drop_target, droppables.size()])
 
 
@@ -142,6 +166,7 @@ func _exit_drop_zone(draggable: Draggable):
 func _on_area_entered(area: Area2D):
 	if area is Draggable:
 		_enter_drop_zone(area as Draggable)
+
 
 func _on_area_exited(area: Area2D):
 	if area is Draggable:
