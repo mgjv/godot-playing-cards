@@ -1,7 +1,7 @@
 Godot Playing Cards
 ===================
 
-This is a Godot project I started to implement some basic card-playing functionality,
+This is a [Godot](https://godotengine.org/download/preview/) project I started to implement some basic card-playing functionality,
 including dragging and dropping, animations going with that, handling of decks and cards, 
 comparing cards within different rules.
 
