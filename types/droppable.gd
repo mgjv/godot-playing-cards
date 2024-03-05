@@ -74,24 +74,15 @@ func _ready():
 	
 	# Add ourselves to pur group and the global; list of droppables
 	add_to_group(GROUP, true)
-	_all_droppables.append(self)
 
 	# Connect to the detection signals
-	area_entered.connect(_on_area_entered)
-	area_exited.connect(_on_area_exited)
+	#area_entered.connect(_on_area_entered)
+	#area_exited.connect(_on_area_exited)
 	
 	# Add a DraggableUI node if requested, and if we don't already have one
 	if add_ui and not get_children().filter(func(n): return n is DroppableUI):
 		var droppable_ui = DroppableUI.new()
 		add_child(droppable_ui)
-
-
-
-# TODO We need drop animation/indication
-# Update position while dragging
-func _process(_delta: float):
-	if Engine.is_editor_hint():
-		return
 
 
 ## Determine whether this DragDropController can receive
@@ -110,27 +101,6 @@ func can_receive(draggable: Draggable) -> bool:
 	return controlled_node._can_receive_drop(draggable.controlled_node)
 
 
-# All currently active droppables
-static var _all_droppables: Array[Droppable]
-# The draggables that are currently on this droppable
-var _draggables: Array[Draggable]
-
-
-static func _set_drop_target(draggable: Draggable):
-	var droppables := _all_droppables.filter(
-			func(d: Droppable): return d.active and draggable in d._draggables
-		)
-	droppables.sort_custom(Util.cmp_render_order)
-	var new_drop_target: Droppable = droppables[0] if droppables else null
-	# Notify listeners of any targeting changes
-	if draggable.drop_target and draggable.drop_target != new_drop_target:
-		draggable.drop_target.untargeted.emit()
-	if new_drop_target and draggable.drop_target != new_drop_target:
-		new_drop_target.targeted.emit()
-	draggable.drop_target = new_drop_target
-	#print("Drop target set to %s (out of %d)" % [draggable.drop_target, droppables.size()])
-
-
 # Called when a drop is received 
 func receive_drop(draggable: Draggable):
 	if not active:
@@ -143,35 +113,19 @@ func receive_drop(draggable: Draggable):
 	#print("%s is receiving drop from %s" % [self, draggable])
 
 
-## Called when a [Draggable] enters this [Droppable]
-func _enter_drop_zone(draggable: Draggable):
-	if not active:
-		return
-	# If we cannot reeive this drop, return
-	if not can_receive(draggable):
-		return
-	_draggables.append(draggable)
-	Droppable._set_drop_target(draggable)
-
-## Called when a [Draggable] leaves this [Droppable]
-func _exit_drop_zone(draggable: Draggable):
-	if not active:
-		return
-	_draggables.erase(draggable)
-	Droppable._set_drop_target(draggable)
+## Called by [Draggable] when we're the drop target
+func target(_draggable: Draggable):
+	#print("%s is being targeted by %s" % [self, _draggable])
+	targeted.emit()
 
 
-# These two just exist to map the generic signals from Area2D
-# to typed calls for DragDropController
-func _on_area_entered(area: Area2D):
-	if area is Draggable:
-		_enter_drop_zone(area as Draggable)
+## Called by [Draggable] when we're no longer the drop target
+func untarget(_draggable: Draggable):
+		#print("%s is no longer targeted by %s" % [self, _draggable])
+		untargeted.emit()
 
 
-func _on_area_exited(area: Area2D):
-	if area is Draggable:
-		_exit_drop_zone(area as Draggable)
-
+# ----- Some basics ----------
 
 func _to_string() -> String:
 	# Node.name is type StringName not String

@@ -37,12 +37,14 @@ signal click
 ## The parameter offset is the offset of the click to the (0,0)
 ## position. This can be used to implement following the mouse
 signal start_drag
+# TODO FIXME This is also emitted on a drop, which is technically correct
+# but probably not great to handle
 signal stop_drag
 
 # TODO This signal should include the item dropped and the draggable
 
 # emitted when the item is dropped
-signal dropped
+signal dropped(droppable: Droppable)
 
 # The group we use to identify these nodes
 # Things will break if someone else uses the same group name
@@ -63,10 +65,14 @@ var offset := Vector2.ZERO
 ## orignally was before dragging
 var drag_position := Vector2.ZERO
 
-## This is the current drop target
-## This is managed by the Droppable class entirely
-var drop_target : Droppable
+## This is the current drop target (read only)
+var drop_target : Droppable:
+	get:
+		return _get_current_drop_target()
+	set(_v):
+		pass
 
+# ----- Evemnt handlr=ers and callbacks
 
 func _ready():
 	if Engine.is_editor_hint():
@@ -74,6 +80,10 @@ func _ready():
 	
 	# Add ourselves to pur group
 	add_to_group(GROUP, true)
+
+	# Connect to the detection signals
+	area_entered.connect(_on_area_entered)
+	area_exited.connect(_on_area_exited)
 	
 	# Add a DraggableUI node if requested, and if we don't already have one
 	if add_ui and not get_children().filter(func(n): return n is DraggableUI):
@@ -118,22 +128,40 @@ func _unhandled_input(event):
 	if dragging and event.is_action_pressed("ui_cancel"):
 		cancel_drag()
 
+# ----- ACTUAL METHODS -----------------
 
+# Yuck. This is a bit of a hack until I figure out a better way to do this
+var _move_func: Callable
+## Move the controlled node to the given position
+func move_to(pos: Vector2):
+	if _move_func:
+		_move_func.call(pos)
+	else:
+		controlled_node.global_position = pos
+
+# ----- HANDLE DRAGGING BEHAVIOURS ------------------
+
+# Called when this Draggable is dropped
 func _drop():
-	_end_drag()
-	dropped.emit()
 	if drop_target:
 		drop_target.receive_drop(self)
 	else:
 		cancel_drag()
+	dropped.emit(drop_target)
+	_end_drag()
 
+
+# Called when a drag ends. Responsible for all state handling
 func _end_drag():
 	if dragging:
 		stop_drag.emit()
+	if drop_target:
+		drop_target.untarget(self)
 	dragging = false
 	mouse_down = false
 
 
+# Called to start a drag. Responsible for all state handling
 func _start_drag():
 	if not active:
 		return
@@ -141,14 +169,8 @@ func _start_drag():
 	drag_position = self.controlled_node.global_position
 	dragging = true
 	start_drag.emit()
-
-# Yuck. This is a bit of a hack until I figure out a better way to do this
-var _move_func: Callable
-func move_to(pos: Vector2):
-	if _move_func:
-		_move_func.call(pos)
-	else:
-		controlled_node.global_position = pos
+	if drop_target:
+		drop_target.target(self)
 
 
 ## Call this to cancel the drag (for example if the drop happens
@@ -158,6 +180,64 @@ func cancel_drag():
 	# Return the item to its start position
 	move_to(drag_position)
 
+
+# ------- INTERACT WITH DROPPABLES -----------
+
+var _droppables : Array[Droppable] = []
+
+# Getter for drop_target property
+func _get_current_drop_target() -> Droppable:
+	return _droppables[0] if _droppables and active else null
+
+
+# Called to determine whether the targeting status needs to change
+func _update_drop_target(old: Droppable, new: Droppable):
+	#print("Evaluating %s vs %s" % [old, new])
+	# Inform droppables about whether they're targeted or not
+	if old and old != new:
+		old.untarget(self)
+	if new and new != old:
+		new.target(self)
+
+
+# Called when we enter a [Droppable]
+func _enter_drop_zone(droppable: Droppable):
+	if OS.is_debug_build() and droppable in _droppables:
+		print_debug("Droppable %s is already present in %s" % [droppable, self])
+
+	# If the droppable doean't want us, return
+	if not droppable.can_receive(self):
+		return
+	if not droppable in _droppables:
+		#print("Adding %s" % droppable)
+		var previous_drop_target = drop_target
+		_droppables.append(droppable)
+		_droppables.sort_custom(Util.cmp_render_order)
+		_update_drop_target(previous_drop_target, drop_target)
+
+
+# Called when we exit a [Droppable]
+func _exit_drop_zone(droppable: Droppable):
+	if droppable in _droppables:
+		#print("Removing %s" % droppable)
+		var previous_drop_target := drop_target
+		_droppables.erase(droppable)
+		_update_drop_target(previous_drop_target, drop_target)
+
+
+# Generic untype signal handler
+func _on_area_entered(area: Area2D):
+	if area is Droppable:
+		_enter_drop_zone(area as Droppable)
+
+
+# Generic untype signal handler
+func _on_area_exited(area: Area2D):
+	if area is Droppable:
+		_exit_drop_zone(area as Droppable)
+
+
+#-------- SOME BASIC SRTUFF ---------------
 
 func _to_string() -> String:
 	# Node.name is type StringName not String

@@ -36,8 +36,8 @@ func _on_stop_drag():
 	scale_cnode(1.0)
 
 
-func _on_dropped():
-	if not draggable.drop_target:
+func _on_dropped(droppable: Droppable):
+	if not droppable:
 		move_cnode_to(draggable.drag_position)
 
 
