@@ -133,4 +133,8 @@ func _to_string() -> String:
 	return "Droppable{%s}" % cname
 
 
-	
+func _get_configuration_warnings():
+	var warnings = []
+	if !controlled_node:
+		warnings.append("A controlled node needs to be set.\nMost likely you want to select the parent node.")
+	return warnings

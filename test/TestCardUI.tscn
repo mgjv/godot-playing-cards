@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://cu58tpewaxoyb"]
+
+[ext_resource type="Script" path="res://test/StartPile.gd" id="1_5f3un"]
+[ext_resource type="Script" path="res://types/empty_spot.gd" id="2_wqwfg"]
+[ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="3_1euxr"]
+[ext_resource type="Script" path="res://types/clickable.gd" id="4_uu4d4"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="5_rqi81"]
+[ext_resource type="Script" path="res://test/EndPile.gd" id="6_3egg2"]
+
+[node name="CardUiTest" type="Node2D"]
+
+[node name="StartPile" type="Node2D" parent="."]
+position = Vector2(100, 150)
+script = ExtResource("1_5f3un")
+
+[node name="EmptySpot" type="Node2D" parent="StartPile"]
+script = ExtResource("2_wqwfg")
+type = 1
+metadata/_edit_lock_ = true
+
+[node name="CardStackUI" type="Node2D" parent="StartPile"]
+script = ExtResource("3_1euxr")
+metadata/_edit_lock_ = true
+
+[node name="Clickable" type="Area2D" parent="StartPile"]
+script = ExtResource("4_uu4d4")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StartPile/Clickable"]
+shape = ExtResource("5_rqi81")
+metadata/_edit_lock_ = true
+
+[node name="EndPile" type="Node2D" parent="."]
+position = Vector2(250, 150)
+script = ExtResource("6_3egg2")
+
+[node name="EmptySpot" type="Node2D" parent="EndPile"]
+script = ExtResource("2_wqwfg")
+type = 3
+metadata/_edit_lock_ = true
+
+[node name="CardStackUI" type="Node2D" parent="EndPile"]
+script = ExtResource("3_1euxr")
+metadata/_edit_lock_ = true
+
+[connection signal="click" from="StartPile/Clickable" to="StartPile" method="_on_clickable_click"]

@@ -1,16 +1,16 @@
 [gd_scene load_steps=15 format=3 uid="uid://c7xgjqjyr8eb4"]
 
-[ext_resource type="Script" path="res://test/TestDragDrop.gd" id="1_5go14"]
+[ext_resource type="Script" path="res://test/drag_and_drop/TestDragDrop.gd" id="1_5go14"]
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="2_g8crc"]
 [ext_resource type="Script" path="res://types/draggable.gd" id="3_v5h0v"]
 [ext_resource type="Script" path="res://types/draggable_ui.gd" id="3_vnwdd"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_fq5y8"]
-[ext_resource type="Script" path="res://test/AlwaysDropper.gd" id="4_sxo2m"]
-[ext_resource type="Script" path="res://test/NoDropper.gd" id="5_yktvt"]
+[ext_resource type="Script" path="res://test/drag_and_drop/AlwaysDropper.gd" id="4_sxo2m"]
+[ext_resource type="Script" path="res://test/drag_and_drop/NoDropper.gd" id="5_yktvt"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="6_80hli"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="7_tnkfv"]
-[ext_resource type="Script" path="res://test/YesDropper.gd" id="8_wtjww"]
-[ext_resource type="Script" path="res://test/InactiveDropper.gd" id="9_fofgs"]
+[ext_resource type="Script" path="res://test/drag_and_drop/YesDropper.gd" id="8_wtjww"]
+[ext_resource type="Script" path="res://test/drag_and_drop/InactiveDropper.gd" id="9_fofgs"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="9_xn31u"]
 [ext_resource type="Script" path="res://types/droppable_ui.gd" id="9_ypkhn"]
 
@@ -59,7 +59,6 @@ texture = ExtResource("2_g8crc")
 metadata/_edit_lock_ = true
 
 [node name="Droppers" type="Node2D" parent="."]
-z_index = -1
 
 [node name="AlwaysDropper" type="Node2D" parent="Droppers"]
 position = Vector2(414, 302)

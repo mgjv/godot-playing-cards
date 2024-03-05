@@ -3,31 +3,8 @@ extends Node2D
 @onready var stack: CardStackUI = $CardStackUI
 
 func _ready():
-	new_deck()
-	print("Created deck with %d cards" % stack.get_child_count())
-	print("Top card is %s and bottom %s" % [stack.top_card(), stack.bottom_card()])
-	show_top_card()
-
-func new_deck():
-	var deck = Deck.new()
-	deck.shuffle()
+	stack.add_full_deck()
+	#print("Created deck with %d cards" % [stack.size()])
+	#print("Top card is %s and bottom %s" % [stack.top_card(), stack.bottom_card()])
 	
-	for card_value in deck.cards:
-		var new_card := stack.add_card(card_value)
-		# TODO This is too intimate
-		new_card.draggable.active = false
-		# FIXME DEBUG
-		#new_card.front.position.x -= 15 * stack.get_child_count()
-		#new_card.back.position.x -= 15 * stack.get_child_count()
-		#new_card.back.position.y -= 50
-
-func show_top_card():
-	var top_card: CardUI = stack.top_card()
-	if top_card:
-		print("Opening on top card %s" % top_card )
-		top_card.open()
-		# TODO This is too intimate
-		top_card.draggable.active = true
-	else:
-		print("whoops, The deck is empty")
 

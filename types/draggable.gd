@@ -29,8 +29,6 @@ extends Hoverable
 ## yourself, explicitly create the node, and configure it.
 @export var add_ui := false
 
-## Emitted when a full click has occured
-signal click
 
 ## emitted at the start and end of a dragging operation
 ##
@@ -145,9 +143,9 @@ func move_to(pos: Vector2):
 func _drop():
 	if drop_target:
 		drop_target.receive_drop(self)
+		dropped.emit(drop_target)
 	else:
 		cancel_drag()
-	dropped.emit(drop_target)
 	_end_drag()
 
 
@@ -192,6 +190,8 @@ func _get_current_drop_target() -> Droppable:
 
 # Called to determine whether the targeting status needs to change
 func _update_drop_target(old: Droppable, new: Droppable):
+	if not dragging:
+		return
 	#print("Evaluating %s vs %s" % [old, new])
 	# Inform droppables about whether they're targeted or not
 	if old and old != new:

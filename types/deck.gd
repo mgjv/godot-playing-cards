@@ -16,6 +16,7 @@ func _init():
 	for suit in Card.SUITS.values():
 		for value in Card.VALUES.values():
 			cards.append(Card.new(suit, value))
+	cards.reverse()
 
 
 ## Shuffle the cards randomly

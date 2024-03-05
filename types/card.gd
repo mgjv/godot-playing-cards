@@ -7,8 +7,11 @@ extends Resource
 ## takes a suit and value.
 ##
 
+# NOTE The order and value of both of these enums is 
+# important. There have been internal assumptions made.
+# Do not change without checking the code
 enum SUITS {
-	clubs, diamonds, hearts, spades,
+	clubs, diamonds, spades, hearts,
 }
 
 enum VALUES {
@@ -17,12 +20,63 @@ enum VALUES {
 	jack, queen, king,
 }
 
-var suit : SUITS
-var value : VALUES
+enum COLORS {
+	red, black
+}
 
+## The suit of this card (Read Only)
+var suit : SUITS
+## The value of this card (Read Only)
+var value : VALUES
+## The color of this card (Read Only)
+var color : COLORS:
+	get:
+		if suit == SUITS.spades or suit == SUITS.clubs:
+			return COLORS.black
+		else:
+			return COLORS.red
+
+
+## Constructor
 func _init(s: SUITS, v: VALUES):
 	suit = s
 	value = v
+
+
+func _card_diff(other: Card, ace_is_low: bool) -> int:
+	var diff = value - other.value
+	if not ace_is_low:
+		if value == VALUES.ace:
+			diff += 13
+		if other.value == VALUES.ace:
+			diff -= 13
+	return diff
+
+
+## Returns true if this card is next in order and of the same suit
+##
+## by default the ace is regarded as smaller than the two,
+## which can be changed with the optional ace_is_low argument
+func is_next(other: Card, ace_is_low = true) -> bool:
+	var diff := _card_diff(other, ace_is_low)
+	if diff == 1 and suit == other.suit:
+		return true
+	else:
+		return false
+
+## Returns true if this card is next in order and of a different colour
+## 
+## This one is common for solitaire games
+##
+## by default the ace is regarded as smaller than the two,
+## which can be changed with the optional ace_is_low argument
+func is_next_rb(other: Card, ace_is_low = true) -> bool:
+	var diff := _card_diff(other, ace_is_low)
+	if diff == 1 and color != other.color:
+		return true
+	else:
+		return false
+
 
 func _to_string() -> String:
 	return VALUES.keys()[value - VALUES.ace] + " of " + SUITS.keys()[suit]

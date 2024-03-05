@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://du4newbmp1yhh"]
+[gd_scene load_steps=10 format=3 uid="uid://du4newbmp1yhh"]
 
-[ext_resource type="Script" path="res://types/droppable.gd" id="3_81v0j"]
+[ext_resource type="PackedScene" uid="uid://nhc2no6rgyca" path="res://scenes/ace_pile.tscn" id="1_tpq8u"]
+[ext_resource type="Script" path="res://scenes/dealer_piles.gd" id="2_5bs4a"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="3_k7tfe"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_aqs2s"]
 [ext_resource type="Script" path="res://scenes/discard_pile.gd" id="4_wph20"]
+[ext_resource type="Script" path="res://types/clickable.gd" id="7_430qs"]
 [ext_resource type="Script" path="res://scenes/deck_pile.gd" id="7_nmnyn"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="7_yo108"]
 [ext_resource type="Script" path="res://scenes/table_top.gd" id="8_82ek7"]
@@ -11,54 +13,67 @@
 [node name="Table" type="Node2D"]
 metadata/_edit_lock_ = true
 
-[node name="DiscardPile" type="Node2D" parent="."]
-position = Vector2(950, 475)
+[node name="AcePiles" type="Node2D" parent="."]
+position = Vector2(70, 37)
+
+[node name="AcePile4" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(425, 70)
+
+[node name="AcePile3" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(300, 70)
+
+[node name="AcePile2" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(175, 70)
+
+[node name="AcePile" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(50, 70)
+
+[node name="DealerPiles" type="Node2D" parent="."]
+position = Vector2(905, 473)
+script = ExtResource("2_5bs4a")
+
+[node name="DiscardPile" type="Node2D" parent="DealerPiles"]
+position = Vector2(175, 70)
 script = ExtResource("4_wph20")
-
-[node name="Droppable" type="Area2D" parent="DiscardPile" node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("3_81v0j")
-controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DiscardPile/Droppable"]
-shape = ExtResource("4_aqs2s")
-metadata/_edit_lock_ = true
-
-[node name="EmptySpot" type="Node2D" parent="DiscardPile"]
+[node name="EmptySpot" type="Node2D" parent="DealerPiles/DiscardPile"]
 script = ExtResource("3_k7tfe")
-type = 2
+type = 4
 metadata/_edit_lock_ = true
 
-[node name="CardStackUI" type="Node2D" parent="DiscardPile"]
+[node name="CardStackUI" type="Node2D" parent="DealerPiles/DiscardPile"]
 script = ExtResource("7_yo108")
 metadata/_edit_lock_ = true
 
-[node name="DeckPile" type="Node2D" parent="."]
-position = Vector2(825, 475)
+[node name="DeckPile" type="Node2D" parent="DealerPiles"]
+position = Vector2(50, 70)
 script = ExtResource("7_nmnyn")
-
-[node name="Droppable" type="Area2D" parent="DeckPile" node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("3_81v0j")
-controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DeckPile/Droppable"]
+[node name="Clickable" type="Area2D" parent="DealerPiles/DeckPile"]
+script = ExtResource("7_430qs")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DealerPiles/DeckPile/Clickable"]
+visible = false
 shape = ExtResource("4_aqs2s")
 metadata/_edit_lock_ = true
 
-[node name="EmptySpot" type="Node2D" parent="DeckPile"]
+[node name="EmptySpot" type="Node2D" parent="DealerPiles/DeckPile"]
 z_index = -5
 script = ExtResource("3_k7tfe")
 type = 1
 metadata/_edit_lock_ = true
 
-[node name="CardStackUI" type="Node2D" parent="DeckPile"]
+[node name="CardStackUI" type="Node2D" parent="DealerPiles/DeckPile"]
 script = ExtResource("7_yo108")
 metadata/_edit_lock_ = true
 
 [node name="TableTop" type="Node2D" parent="."]
+visible = false
 z_index = -10
 script = ExtResource("8_82ek7")
 metadata/_edit_lock_ = true
 
-[connection signal="received_drop" from="DiscardPile/Droppable" to="DiscardPile" method="_on_droppable_received_drop"]
+[connection signal="click" from="DealerPiles/DeckPile/Clickable" to="DealerPiles" method="_on_deck_click"]

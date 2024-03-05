@@ -66,7 +66,7 @@ func _input_event(_viewport, event, _shape_idx):
 
 func _detect_click():
 	if active:
-		print("%s clicked" % self)
+		# print("%s clicked" % self)
 		click.emit()
 
 

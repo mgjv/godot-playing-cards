@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://crkum6arn7pug"]
+[gd_scene load_steps=67 format=3 uid="uid://crkum6arn7pug"]
 
 [ext_resource type="Script" path="res://scenes/card_ui.gd" id="1_ha8ee"]
 [ext_resource type="Script" path="res://types/draggable.gd" id="2_56qcl"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_3eoqj"]
 [ext_resource type="Script" path="res://scenes/card_ui_front.gd" id="3_w38r2"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="3_wdxe4"]
+[ext_resource type="Script" path="res://types/draggable_ui.gd" id="4_foeh3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lf5hr"]
 atlas = ExtResource("2_p2t3u")
@@ -487,11 +488,15 @@ script = ExtResource("1_ha8ee")
 [node name="Draggable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
 script = ExtResource("2_56qcl")
 controlled_node = NodePath("..")
+active = false
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Draggable"]
 shape = ExtResource("3_wdxe4")
 metadata/_edit_lock_ = true
+
+[node name="DraggableUI" type="Node" parent="Draggable"]
+script = ExtResource("4_foeh3")
 
 [node name="Front" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_cg6vg")
@@ -509,6 +514,5 @@ libraries = {
 }
 speed_scale = 10.0
 
-[connection signal="click" from="Draggable" to="." method="_on_draggable_click"]
 [connection signal="start_drag" from="Draggable" to="." method="_on_draggable_start_drag"]
 [connection signal="stop_drag" from="Draggable" to="." method="_on_draggable_stop_drag"]

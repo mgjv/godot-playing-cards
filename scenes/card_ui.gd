@@ -6,6 +6,8 @@ extends Node2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var draggable: Draggable = $Draggable
 
+const my_scene: PackedScene = preload("res://scenes/card_ui.tscn")
+
 ## The card that this UI is currently representing
 var card: Card:
 	set(new_card):
@@ -18,6 +20,17 @@ var card: Card:
 			# If the card was open, make sure it's closed again
 			back.visible = true
 		#print("SET ", card)
+
+
+## The preferred constructor for this scene/class
+#
+## This class shouldn'[t be used outside of the scene, and the scene shouldn't be 
+## used without holding a card. So, you should use this constructor
+## only
+static func new_from_card(_card: Card) -> CardUI:
+	var new_card_ui: CardUI = my_scene.instantiate() as CardUI
+	new_card_ui.card = _card
+	return new_card_ui
 
 
 func _ready():
@@ -49,29 +62,12 @@ func flip():
 		close()
 
 
-func _on_draggable_click():
-	print("Clicked")
-	pass
-
-
-func scale_card(new_scale: float):
-	var tween = get_tree().create_tween()
-	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(self, "scale", new_scale * Vector2.ONE, .25)
-
-
-func _on_draggable_start_drag():
-	scale_card(1.2)
-	#print("%s starting drag" % self)
-
-	
-func _on_draggable_stop_drag():
-	scale_card(1.0)
-	#print("%s stopping drag" % self)
-
-
-func _on_draggable_drop():
-	print("Dropped at ", get_global_mouse_position())
+## Move the card to this location
+##
+## This is cpnrolled by the draggable, so see the configuration
+## of the animation over there.
+func move_to(pos: Vector2):
+	draggable.move_to(pos)
 
 
 func _to_string() -> String:

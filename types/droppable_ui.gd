@@ -2,6 +2,7 @@
 class_name DroppableUI
 extends Node
 
+@export_group("Scale Animation", "scale_animation_")
 @export var scale_animation_type: Tween.TransitionType  = Tween.TRANS_CUBIC
 @export_range(0.0, 1.0, 0.05) var scale_animation_duration: float = 0.25
 @export_range(1.0, 1.5, 0.05) var scale_animation_size: float = 1.2
