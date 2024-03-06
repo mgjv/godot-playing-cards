@@ -23,3 +23,4 @@ func _can_receive_drop(node: Node2D) -> bool:
 func _on_received_drop(node: Node2D):
 	#print("Got %s" % node)
 	stack.add_card(node as CardUI)
+	

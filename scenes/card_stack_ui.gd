@@ -20,12 +20,15 @@ func add_full_deck(shuffle := true):
 
 
 ## add a card to the stack (on top)
+##
+## Note that this does NOT move the card. The caller is 
+## responsible for moving it, by either explicitly
+## moving the card, or by letting a droppable do it
 func add_card(card: CardUI):
 	# TODO If this card already has another parent, 
 	# we need to reparent it
 	if card.get_parent():
 		card.reparent(self)
-		card.move_to(global_position)
 	else:
 		add_child(card)
 
