@@ -10,6 +10,9 @@ enum TYPE {
 	square,
 }
 
+# TODO One we figure out how to do the UIConfig default
+# Stuff (Also see draggable_ui and droppable_ui, we should 
+# also do that here.
 @export var type: TYPE = TYPE.none:
 	set(v):
 		type = v
@@ -32,7 +35,7 @@ enum TYPE {
 		queue_redraw()
 
 var centre := Vector2i.ZERO
-var overall_size := Vector2i(100, 140)
+var overall_size := UIConfig.CARD_SIZE
 var top_left := centre - overall_size/2
 var outline := Rect2i(top_left, overall_size)
 

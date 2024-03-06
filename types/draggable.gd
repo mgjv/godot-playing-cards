@@ -27,7 +27,7 @@ extends Hoverable
 ## This will add DraggableUI animations to the draggable
 ## with the default settings. If you want to control the settings
 ## yourself, explicitly create the node, and configure it.
-@export var add_ui := false
+@export var add_ui := true
 
 
 ## emitted at the start and end of a dragging operation

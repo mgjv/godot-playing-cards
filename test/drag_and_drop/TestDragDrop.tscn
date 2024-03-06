@@ -1,9 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7xgjqjyr8eb4"]
+[gd_scene load_steps=13 format=3 uid="uid://c7xgjqjyr8eb4"]
 
 [ext_resource type="Script" path="res://test/drag_and_drop/TestDragDrop.gd" id="1_5go14"]
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="2_g8crc"]
 [ext_resource type="Script" path="res://types/draggable.gd" id="3_v5h0v"]
-[ext_resource type="Script" path="res://types/draggable_ui.gd" id="3_vnwdd"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_fq5y8"]
 [ext_resource type="Script" path="res://test/drag_and_drop/AlwaysDropper.gd" id="4_sxo2m"]
 [ext_resource type="Script" path="res://test/drag_and_drop/NoDropper.gd" id="5_yktvt"]
@@ -12,7 +11,6 @@
 [ext_resource type="Script" path="res://test/drag_and_drop/YesDropper.gd" id="8_wtjww"]
 [ext_resource type="Script" path="res://test/drag_and_drop/InactiveDropper.gd" id="9_fofgs"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="9_xn31u"]
-[ext_resource type="Script" path="res://types/droppable_ui.gd" id="9_ypkhn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sfms2"]
 size = Vector2(50, 70)
@@ -33,9 +31,6 @@ metadata/_edit_lock_ = true
 shape = SubResource("RectangleShape2D_sfms2")
 metadata/_edit_lock_ = true
 
-[node name="DraggableUi" type="Node" parent="SmallCard/Draggable"]
-script = ExtResource("3_vnwdd")
-
 [node name="Sprite2D" type="Sprite2D" parent="SmallCard"]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_g8crc")
@@ -47,7 +42,6 @@ position = Vector2(100, 158)
 [node name="Draggable" type="Area2D" parent="Card" node_paths=PackedStringArray("controlled_node")]
 script = ExtResource("3_v5h0v")
 controlled_node = NodePath("..")
-add_ui = true
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Card/Draggable"]
@@ -78,9 +72,6 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/AlwaysDropper/Droppable"]
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
-
-[node name="DroppableUI" type="Node" parent="Droppers/AlwaysDropper/Droppable"]
-script = ExtResource("9_ypkhn")
 
 [node name="NoDropper" type="Node2D" parent="Droppers"]
 position = Vector2(480, 212)

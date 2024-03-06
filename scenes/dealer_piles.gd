@@ -17,7 +17,15 @@ func _turn_top_card():
 
 # Flip the cards from the stack back to the deck
 func _reset_cards():
-	stack.move_cards_to(deck, true)
+	# get the stack
+	var movers := stack.cards()
+	# flip the stack over
+	movers.reverse()
+	# move the cards, and flip each of them
+	for mover in movers:
+		mover.close()
+		deck.add_card(mover)
+
 
 # Called when the player clicks on the deck
 func _on_deck_click():

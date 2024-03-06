@@ -58,16 +58,4 @@ func bottom_card() -> CardUI:
 	return get_child(0)
 
 
-## Move all cards from this stack to another
-## optionally inverting their order (which you would
-## need if the whole stack needs to be flopped from open 
-## to closed or the other way around
-## If flip is true, the cards will also be flipped
-func move_cards_to(stack: CardStackUI, flip := false):
-	var movers := cards()
-	if flip:
-		movers.reverse()
-	for mover in movers:
-		if flip:
-			mover.flip()
-		stack.add_card(mover)
+

@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://scenes/ace_pile.gd" id="1_vfu16"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="2_3a5d8"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="3_8xaba"]
-[ext_resource type="Script" path="res://types/droppable_ui.gd" id="4_hs3on"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="5_3xnlr"]
+[ext_resource type="Script" path="res://types/card_counter.gd" id="6_n31ay"]
 
 [node name="AcePile" type="Node2D"]
 script = ExtResource("1_vfu16")
@@ -26,12 +26,12 @@ controlled_node = NodePath("..")
 align_dropped_item = false
 metadata/_edit_lock_ = true
 
-[node name="DroppableUI" type="Node" parent="Droppable"]
-script = ExtResource("4_hs3on")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppable"]
 visible = false
 shape = ExtResource("5_3xnlr")
 metadata/_edit_lock_ = true
+
+[node name="CardCounter" type="Node2D" parent="."]
+script = ExtResource("6_n31ay")
 
 [connection signal="received_drop" from="Droppable" to="." method="_on_received_drop"]

@@ -49,8 +49,7 @@ extends Area2D
 ## Whether to automatically add a DroppableUI node
 ##
 ## This will add DroppableUI animations to the droppable
-## with the default settings. If you want to control the settings
-## yourself, explicitly create the node, and configure it.
+## with the default settings.
 @export var add_ui := true
 
 ## Emitted when something is dropped

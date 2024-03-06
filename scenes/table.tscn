@@ -1,16 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://du4newbmp1yhh"]
+[gd_scene load_steps=12 format=3 uid="uid://du4newbmp1yhh"]
 
+[ext_resource type="Script" path="res://scenes/table.gd" id="1_f8l65"]
 [ext_resource type="PackedScene" uid="uid://nhc2no6rgyca" path="res://scenes/ace_pile.tscn" id="1_tpq8u"]
 [ext_resource type="Script" path="res://scenes/dealer_piles.gd" id="2_5bs4a"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="3_k7tfe"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_aqs2s"]
 [ext_resource type="Script" path="res://scenes/discard_pile.gd" id="4_wph20"]
+[ext_resource type="Script" path="res://types/droppable.gd" id="6_n7qtx"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="7_430qs"]
 [ext_resource type="Script" path="res://scenes/deck_pile.gd" id="7_nmnyn"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="7_yo108"]
-[ext_resource type="Script" path="res://scenes/table_top.gd" id="8_82ek7"]
+[ext_resource type="Script" path="res://types/card_counter.gd" id="9_q1awn"]
 
 [node name="Table" type="Node2D"]
+script = ExtResource("1_f8l65")
 metadata/_edit_lock_ = true
 
 [node name="AcePiles" type="Node2D" parent="."]
@@ -37,6 +40,14 @@ position = Vector2(175, 70)
 script = ExtResource("4_wph20")
 metadata/_edit_lock_ = true
 
+[node name="Droppable" type="Area2D" parent="DealerPiles/DiscardPile" node_paths=PackedStringArray("controlled_node")]
+script = ExtResource("6_n7qtx")
+controlled_node = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DealerPiles/DiscardPile/Droppable"]
+visible = false
+shape = ExtResource("4_aqs2s")
+
 [node name="EmptySpot" type="Node2D" parent="DealerPiles/DiscardPile"]
 script = ExtResource("3_k7tfe")
 type = 4
@@ -45,6 +56,9 @@ metadata/_edit_lock_ = true
 [node name="CardStackUI" type="Node2D" parent="DealerPiles/DiscardPile"]
 script = ExtResource("7_yo108")
 metadata/_edit_lock_ = true
+
+[node name="CardCounter" type="Node2D" parent="DealerPiles/DiscardPile"]
+script = ExtResource("9_q1awn")
 
 [node name="DeckPile" type="Node2D" parent="DealerPiles"]
 position = Vector2(50, 70)
@@ -70,10 +84,7 @@ metadata/_edit_lock_ = true
 script = ExtResource("7_yo108")
 metadata/_edit_lock_ = true
 
-[node name="TableTop" type="Node2D" parent="."]
-visible = false
-z_index = -10
-script = ExtResource("8_82ek7")
-metadata/_edit_lock_ = true
+[node name="CardCounter" type="Node2D" parent="DealerPiles/DeckPile"]
+script = ExtResource("9_q1awn")
 
 [connection signal="click" from="DealerPiles/DeckPile/Clickable" to="DealerPiles" method="_on_deck_click"]
