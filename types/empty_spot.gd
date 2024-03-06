@@ -34,10 +34,10 @@ enum TYPE {
 		color = v
 		queue_redraw()
 
-var centre := Vector2i.ZERO
+var centre := Vector2.ZERO
 var overall_size := UIConfig.CARD_SIZE
 var top_left := centre - overall_size/2
-var outline := Rect2i(top_left, overall_size)
+var outline := Rect2(top_left, overall_size)
 
 func _draw():
 	#print("Drawing")
@@ -46,17 +46,17 @@ func _draw():
 		TYPE.circle:
 			draw_arc(centre, size/2.0, 0, 360, 36, color, line_width)
 		TYPE.cross:
-			var offset := Vector2i.ONE * size/2
+			var offset := Vector2.ONE * size/2
 			draw_line(centre - offset, centre + offset, color, line_width)
 			offset.x *= -1
 			draw_line(centre - offset, centre + offset, color, line_width)
 		TYPE.plus:
-			var offset := Vector2i.UP * size/2
+			var offset := Vector2.UP * size/2
 			draw_line(centre - offset, centre + offset, color, line_width)
-			offset = Vector2i.RIGHT * size/2
+			offset = Vector2.RIGHT * size/2
 			draw_line(centre - offset, centre + offset, color, line_width)			
 		TYPE.square:
-			var square_size := Vector2i.ONE * size
-			var square := Rect2i(centre - square_size/2, square_size)
+			var square_size := Vector2.ONE * size
+			var square := Rect2(centre - square_size/2, square_size)
 			draw_rect(square, color, false, line_width)
 

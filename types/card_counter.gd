@@ -28,18 +28,27 @@ func _ready():
 			push_error("%s has nothing to count. Removing myself" % self.path)
 			queue_free()
 			return
-
-	label = Label.new()
-	_set_count(stack.size())
-	add_child(label)
-	# We have to do this after adding the label
-	var label_height := label.get_rect().size.y
-	label.position.x = - UIConfig.CARD_CENTRE.x
-	label.position.y = - UIConfig.CARD_CENTRE.y - label_height
+	
+	_add_label()
 	
 	#print("Counting children of %s" % node_to_count.get_path())
 	stack.child_entered_tree.connect(_on_child_entered)
 	stack.child_exiting_tree.connect(_on_child_exiting)
+
+
+func _add_label():
+	#A box large enough for any text we might have
+	var label_bounds = Vector2(25.0, 25)
+	label = Label.new()
+	label.size = label_bounds
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_set_count(stack.size())
+	add_child(label)
+	
+	# place the label at the top left corner, aligned for top right text
+	label.position -= UIConfig.CARD_CENTRE
+	label.position.x -= label_bounds.x + 2
 
 
 func _set_count(count: int):

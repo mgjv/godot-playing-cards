@@ -37,7 +37,7 @@ const DEBUG_GROUP := "debug"
 @export_range(0.0, 1.0, 0.05) var scale_animation_duration: float = 0.25
 @export_range(1.0, 1.5, 0.05) var scale_animation_size: float = 1.2
 
-const CARD_SIZE := Vector2i(100, 140)
+const CARD_SIZE := Vector2(100, 140)
 const CARD_CENTRE := CARD_SIZE/2
 
 func setup_debug_nodes():

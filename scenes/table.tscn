@@ -28,8 +28,12 @@ position = Vector2(300, 70)
 [node name="AcePile2" parent="AcePiles" instance=ExtResource("1_tpq8u")]
 position = Vector2(175, 70)
 
-[node name="AcePile" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+[node name="AcePile1" parent="AcePiles" instance=ExtResource("1_tpq8u")]
 position = Vector2(50, 70)
+
+[node name="CentrePiles" type="Node2D" parent="."]
+
+[node name="BuildPile" type="Node2D" parent="CentrePiles"]
 
 [node name="DealerPiles" type="Node2D" parent="."]
 position = Vector2(905, 473)
@@ -86,5 +90,23 @@ metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="DealerPiles/DeckPile"]
 script = ExtResource("9_q1awn")
+
+[node name="Control" type="Control" parent="DealerPiles/DeckPile"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Label" type="Label" parent="DealerPiles/DeckPile/Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
 
 [connection signal="click" from="DealerPiles/DeckPile/Clickable" to="DealerPiles" method="_on_deck_click"]
