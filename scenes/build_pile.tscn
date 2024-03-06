@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmrefjqqgcpol"]
+
+[ext_resource type="Script" path="res://scenes/build_pile.gd" id="1_5ta7e"]
+[ext_resource type="Script" path="res://types/empty_spot.gd" id="1_8aqd8"]
+[ext_resource type="Script" path="res://types/droppable.gd" id="1_gn14e"]
+[ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="2_27rx1"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="2_dduda"]
+[ext_resource type="Script" path="res://types/card_counter.gd" id="6_tmtpw"]
+
+[node name="BuildPile" type="Node2D"]
+script = ExtResource("1_5ta7e")
+
+[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
+script = ExtResource("1_gn14e")
+controlled_node = NodePath("..")
+active = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Droppable"]
+visible = false
+shape = ExtResource("2_dduda")
+
+[node name="EmptySpot" type="Node2D" parent="."]
+script = ExtResource("1_8aqd8")
+
+[node name="ClosedCards" type="Node2D" parent="."]
+script = ExtResource("2_27rx1")
+
+[node name="OpenCards" type="Node2D" parent="."]
+script = ExtResource("2_27rx1")
+
+[node name="ClosedCardsCounter" type="Node2D" parent="." node_paths=PackedStringArray("stack")]
+script = ExtResource("6_tmtpw")
+stack = NodePath("../ClosedCards")
+
+[node name="OpenCardsCounter" type="Node2D" parent="." node_paths=PackedStringArray("stack")]
+script = ExtResource("6_tmtpw")
+stack = NodePath("../OpenCards")
+offset = Vector2(0, 25)

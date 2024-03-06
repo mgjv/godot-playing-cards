@@ -4,7 +4,19 @@ extends Node2D
 ## A Card Stack managing CardUI instances
 ##
 ## The only children of one of these nodes should be CardUI instances
-## ideally, no one else mucks around with the children.
+## Ideally, no one else mucks around with the children.
+
+## Manage children as a hierarchy
+##
+## A normal stack manages its children as a pile. Yu can take things 
+## from the top or you can take things from the bottom
+##
+## When [member hierarchical] is true, the cards are managed
+## as a hierarchy. This generally means that when you pick up a 
+## child in the middle, that you also get all opf its children.
+##
+## TODO implement
+@export var hierarchical := false
 
 ## Add a full deck of cards to this stack
 ##
@@ -55,10 +67,6 @@ func size():
 func top_card() -> CardUI:
 	return get_child(-1)
 
-
-## Get the bottom card
-func bottom_card() -> CardUI:
-	return get_child(0)
 
 
 

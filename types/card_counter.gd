@@ -7,6 +7,9 @@ extends Node2D
 ## CardStackUI.
 @export var stack: CardStackUI
 
+## By how far to move the label from its current position
+@export var offset: Vector2 = Vector2.ZERO
+
 var label: Label
 
 func _ready():
@@ -48,6 +51,7 @@ func _add_label():
 	
 	# place the label at the top left corner, aligned for top right text
 	label.position -= UIConfig.CARD_CENTRE
+	label.position += offset
 	label.position.x -= label_bounds.x + 2
 
 

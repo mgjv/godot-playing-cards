@@ -25,7 +25,6 @@ func _on_targeted():
 func _on_untargeted():
 	scale_cnode(1.0)
 
-
 func scale_cnode(new_scale: float):
 	var tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.scale_animation_type)

@@ -3,8 +3,6 @@ extends Node2D
 @onready var deck:  CardStackUI = $DeckPile/CardStackUI
 @onready var stack: CardStackUI = $DiscardPile/CardStackUI
 
-func _ready():
-	_turn_top_card()
 
 # Turn over the top card
 func _turn_top_card():
@@ -20,13 +18,14 @@ func _turn_top_card():
 # Flip the cards from the stack back to the deck
 func _reset_cards():
 	# get the stack
-	var movers := stack.cards()
+	var cards := stack.cards()
 	# flip the stack over
-	movers.reverse()
+	cards.reverse()
 	# move the cards, and flip each of them
-	for mover in movers:
-		mover.close()
-		deck.add_card(mover)
+	for card in cards:
+		card.close()
+		deck.add_card(card)
+		card.move_to(deck.global_position)
 
 
 # Called when the player clicks on the deck

@@ -5,8 +5,12 @@ extends Node2D
 @onready var back: Sprite2D = $Back
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var draggable: Draggable = $Draggable
+@onready var droppable: Droppable = $Droppable
 
 const my_scene: PackedScene = preload("res://scenes/card_ui.tscn")
+
+# TODO Work out how to make this more immutable
+# TODO Allow choice about which direction(s0) the card rotation goes in
 
 ## The card that this UI is currently representing
 var card: Card:
@@ -36,7 +40,6 @@ static func new_from_card(_card: Card) -> CardUI:
 func _ready():
 	# trigger the setter so display is correct
 	card = card
-
 
 ## Show the front of the card
 func open():

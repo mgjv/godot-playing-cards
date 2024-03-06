@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://nhc2no6rgyca" path="res://scenes/ace_pile.tscn" id="1_tpq8u"]
 [ext_resource type="Script" path="res://scenes/dealer_piles.gd" id="2_5bs4a"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="3_k7tfe"]
+[ext_resource type="PackedScene" uid="uid://dmrefjqqgcpol" path="res://scenes/build_pile.tscn" id="3_ybc8y"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_aqs2s"]
 [ext_resource type="Script" path="res://scenes/discard_pile.gd" id="4_wph20"]
-[ext_resource type="Script" path="res://types/droppable.gd" id="6_n7qtx"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="7_430qs"]
 [ext_resource type="Script" path="res://scenes/deck_pile.gd" id="7_nmnyn"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="7_yo108"]
@@ -16,41 +16,15 @@
 script = ExtResource("1_f8l65")
 metadata/_edit_lock_ = true
 
-[node name="AcePiles" type="Node2D" parent="."]
-position = Vector2(70, 37)
-
-[node name="AcePile4" parent="AcePiles" instance=ExtResource("1_tpq8u")]
-position = Vector2(425, 70)
-
-[node name="AcePile3" parent="AcePiles" instance=ExtResource("1_tpq8u")]
-position = Vector2(300, 70)
-
-[node name="AcePile2" parent="AcePiles" instance=ExtResource("1_tpq8u")]
-position = Vector2(175, 70)
-
-[node name="AcePile1" parent="AcePiles" instance=ExtResource("1_tpq8u")]
-position = Vector2(50, 70)
-
-[node name="CentrePiles" type="Node2D" parent="."]
-
-[node name="BuildPile" type="Node2D" parent="CentrePiles"]
-
 [node name="DealerPiles" type="Node2D" parent="."]
-position = Vector2(905, 473)
+position = Vector2(1025, 335)
 script = ExtResource("2_5bs4a")
-
-[node name="DiscardPile" type="Node2D" parent="DealerPiles"]
-position = Vector2(175, 70)
-script = ExtResource("4_wph20")
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="DealerPiles/DiscardPile" node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("6_n7qtx")
-controlled_node = NodePath("..")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DealerPiles/DiscardPile/Droppable"]
-visible = false
-shape = ExtResource("4_aqs2s")
+[node name="DiscardPile" type="Node2D" parent="DealerPiles"]
+position = Vector2(50, 70)
+script = ExtResource("4_wph20")
+metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="DealerPiles/DiscardPile"]
 script = ExtResource("3_k7tfe")
@@ -65,7 +39,7 @@ metadata/_edit_lock_ = true
 script = ExtResource("9_q1awn")
 
 [node name="DeckPile" type="Node2D" parent="DealerPiles"]
-position = Vector2(50, 70)
+position = Vector2(50, 225)
 script = ExtResource("7_nmnyn")
 metadata/_edit_lock_ = true
 
@@ -91,22 +65,69 @@ metadata/_edit_lock_ = true
 [node name="CardCounter" type="Node2D" parent="DealerPiles/DeckPile"]
 script = ExtResource("9_q1awn")
 
-[node name="Control" type="Control" parent="DealerPiles/DeckPile"]
-layout_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
-grow_horizontal = 0
+[node name="BuildPiles" type="Node2D" parent="."]
+position = Vector2(50, 190)
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="DealerPiles/DeckPile/Control"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 23.0
-grow_horizontal = 0
+[node name="BuildPile1" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(50, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+metadata/_edit_lock_ = true
+
+[node name="BuildPile2" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(175, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 2
+metadata/_edit_lock_ = true
+
+[node name="BuildPile3" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(300, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 3
+metadata/_edit_lock_ = true
+
+[node name="BuildPile4" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(425, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 4
+metadata/_edit_lock_ = true
+
+[node name="BuildPile5" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(550, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 5
+metadata/_edit_lock_ = true
+
+[node name="BuildPile6" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(675, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 6
+metadata/_edit_lock_ = true
+
+[node name="BuildPile7" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
+position = Vector2(800, 70)
+source_deck = NodePath("../../DealerPiles/DeckPile/CardStackUI")
+initial_number_of_cards = 7
+metadata/_edit_lock_ = true
+
+[node name="AcePiles" type="Node2D" parent="."]
+position = Vector2(425, 25)
+metadata/_edit_lock_ = true
+
+[node name="AcePile4" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(425, 70)
+metadata/_edit_lock_ = true
+
+[node name="AcePile3" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(300, 70)
+metadata/_edit_lock_ = true
+
+[node name="AcePile2" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(175, 70)
+metadata/_edit_lock_ = true
+
+[node name="AcePile1" parent="AcePiles" instance=ExtResource("1_tpq8u")]
+position = Vector2(50, 70)
+metadata/_edit_lock_ = true
 
 [connection signal="click" from="DealerPiles/DeckPile/Clickable" to="DealerPiles" method="_on_deck_click"]
