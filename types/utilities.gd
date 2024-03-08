@@ -6,8 +6,8 @@ extends Object
 
 ## Composed z index, for nodes that potentially control other nodes
 static func c_z_index(c: CanvasItem) -> int:
-	if "controlled_node" in c:
-		return abs_z_index(c.controlled_node)
+	if "control_node" in c:
+		return abs_z_index(c.control_node)
 	else:
 		return abs_z_index(c)
 
@@ -64,7 +64,7 @@ static func array_to_canvas_items(array: Array[Variant]) -> Array[CanvasItem]:
 
 ## Find the top CanvasItem
 ##
-## If items have a "controlled_node" member, then it will be used
+## If items have a "control_node" member, then it will be used
 ## for the order determination instead of the node itself.
 ##
 ## It doesn't make sense to call this with anything else than

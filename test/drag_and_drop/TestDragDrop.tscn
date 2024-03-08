@@ -22,9 +22,9 @@ script = ExtResource("1_5go14")
 z_index = 1
 position = Vector2(150, 217)
 
-[node name="Draggable" type="Area2D" parent="SmallCard" node_paths=PackedStringArray("controlled_node")]
+[node name="Draggable" type="Area2D" parent="SmallCard" node_paths=PackedStringArray("control_node")]
 script = ExtResource("3_v5h0v")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallCard/Draggable"]
@@ -40,9 +40,9 @@ metadata/_edit_lock_ = true
 [node name="Card" type="Node2D" parent="."]
 position = Vector2(100, 158)
 
-[node name="Draggable" type="Area2D" parent="Card" node_paths=PackedStringArray("controlled_node")]
+[node name="Draggable" type="Area2D" parent="Card" node_paths=PackedStringArray("control_node")]
 script = ExtResource("3_v5h0v")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Card/Draggable"]
@@ -66,9 +66,9 @@ type = 1
 color = Color(0, 1, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="Droppers/AlwaysDropper" node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="Droppers/AlwaysDropper" node_paths=PackedStringArray("control_node")]
 script = ExtResource("7_tnkfv")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/AlwaysDropper/Droppable"]
@@ -86,9 +86,9 @@ type = 4
 color = Color(0.584314, 0.0666667, 0.121569, 1)
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="Droppers/NoDropper" node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="Droppers/NoDropper" node_paths=PackedStringArray("control_node")]
 script = ExtResource("7_tnkfv")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/NoDropper/Droppable"]
@@ -106,9 +106,9 @@ type = 3
 color = Color(1, 1, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="Droppers/YesDropper" node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="Droppers/YesDropper" node_paths=PackedStringArray("control_node")]
 script = ExtResource("7_tnkfv")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/YesDropper/Droppable"]
@@ -126,9 +126,9 @@ type = 2
 color = Color(0.411765, 0.411765, 0.411765, 1)
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="Droppers/InactiveDropper" node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="Droppers/InactiveDropper" node_paths=PackedStringArray("control_node")]
 script = ExtResource("7_tnkfv")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 active = false
 metadata/_edit_lock_ = true
 

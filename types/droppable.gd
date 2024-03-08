@@ -5,14 +5,14 @@ extends Area2D
 ## A node that will handle droppability of any [Draggable]
 ##
 ## Make one of these a child of one of your nodes, and
-## configure that node to [member Droppable.controlled_node]
+## configure that node to [member Droppable.control_node]
 ##
 ## If you want to be able to control which nodes can de dropped, define a method 
 ## with signature 
 ##
 ## [code]_can_receive_drop(node: Node2D) -> bool[/code].
 ##
-## The [param node] patameter will be the [member Draggable.controlled_node]
+## The [param node] parameter will be the [member Draggable.control_node]
 ## member you defined on that side. Return true if you're willing and able to accept
 ## a drop of the given item.
 ## 
@@ -23,19 +23,19 @@ extends Area2D
 ## The node that will be used to implement the drag
 ## move and animations. If you don't set this, you will
 ## have to handle drag movements yourself
-@export var controlled_node : Node2D:
+@export var control_node : Node2D:
 	set(n):
-		controlled_node = n
+		control_node = n
 		update_configuration_warnings()
 
 ## Are we actively listening for drops
 @export var active := true
 
 
-## Whether to automatically align the dropped item with [member controlled_node]
+## Whether to automatically align the dropped item with [member control_node]
 ##
 ## If true, this will change the global_position of the dropped item
-## to that of the [member controlled_node], possibly with an animation. 
+## to that of the [member control_node], possibly with an animation. 
 ## If you want to handle moving the item yourself, set this to false.
 ##
 ## This provides symmetry for the case where a Draggable is dropped
@@ -86,7 +86,7 @@ func _ready():
 		add_child(droppable_ui)
 
 # Allow can_receive to be overriddedn from outside of the 
-# controlled_node as well
+# control_node as well
 var _override_can_receive: Callable
 
 ## Determine whether this DragDropController can receive
@@ -96,7 +96,7 @@ var _override_can_receive: Callable
 ##
 ## The order in which decisions are made is
 ## - [member _override_can_receive]()
-## - [member _controlled_node][code]._can_receive()[/code]
+## - [member _control_node][code]._can_receive()[/code]
 ## - [member active]
 func can_receive(draggable: Draggable) -> bool:
 	#print("%s reporting to %s" % [self, draggable])
@@ -104,18 +104,18 @@ func can_receive(draggable: Draggable) -> bool:
 		return false
 	
 	# We don't want to drop something on ourselves
-	if controlled_node == draggable.controlled_node:
+	if control_node == draggable.control_node:
 		return false
 
 	# If an overriden can_receive method is implemented, use it
 	if _override_can_receive:
-		return _override_can_receive.call(draggable.controlled_node)
+		return _override_can_receive.call(draggable.control_node)
 		
 	# If there is no controlled node, assume all draggables are valid
-	if not controlled_node.has_method("_can_receive_drop"):
+	if not control_node.has_method("_can_receive_drop"):
 		return active # which is always true here
 	
-	return controlled_node._can_receive_drop(draggable.controlled_node)
+	return control_node._can_receive_drop(draggable.control_node)
 
 
 # Called when a drop is received 
@@ -125,8 +125,8 @@ func receive_drop(draggable: Draggable):
 		push_error("Item dropped on inactive %s" % self)
 		return
 	if align_dropped_item:
-		draggable.move_to(controlled_node.global_position)
-	received_drop.emit(draggable.controlled_node)
+		draggable.move_to(control_node.global_position)
+	received_drop.emit(draggable.control_node)
 	#print("%s is receiving drop from %s" % [self, draggable])
 
 
@@ -146,9 +146,9 @@ func untarget(_draggable: Draggable):
 
 
 func _to_string() -> String:
-	if controlled_node and get_path():
+	if control_node and get_path():
 		# Node.name is type StringName not String
-		var cname: String = controlled_node.to_string() if controlled_node.has_method("_to_string") else str(controlled_node.get_path())
+		var cname: String = control_node.to_string() if control_node.has_method("_to_string") else str(control_node.get_path())
 		return "Droppable{%s}" % [cname]
 	else:
 		# If we're not yet in a tree
@@ -157,6 +157,6 @@ func _to_string() -> String:
 
 func _get_configuration_warnings():
 	var warnings = []
-	if !controlled_node:
+	if !control_node:
 		warnings.append("You must configure a controlled node.\nMost likely you want to select the parent node.")
 	return warnings

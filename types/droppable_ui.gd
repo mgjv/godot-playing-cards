@@ -29,7 +29,7 @@ func _on_untargeted():
 func scale_cnode(new_scale: float):
 	var tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.scale_animation_type)
-	tween.tween_property(droppable.controlled_node, "scale", new_scale * Vector2.ONE, UIConfig.scale_animation_duration)
+	tween.tween_property(droppable.control_node, "scale", new_scale * Vector2.ONE, UIConfig.scale_animation_duration)
 
 
 func _get_configuration_warnings():

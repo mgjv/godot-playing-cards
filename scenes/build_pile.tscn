@@ -42,9 +42,9 @@ metadata/_edit_lock_ = true
 script = ExtResource("4_lc5lp")
 metadata/_edit_lock_ = true
 
-[node name="Droppable" type="Area2D" parent="CardDroppable" node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="CardDroppable" node_paths=PackedStringArray("control_node")]
 script = ExtResource("1_gn14e")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 active = false
 align_dropped_item = false
 metadata/_edit_lock_ = true
@@ -53,9 +53,9 @@ metadata/_edit_lock_ = true
 shape = ExtResource("2_dduda")
 debug_color = Color(1, 0, 0, 0.717647)
 
-[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
+[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("control_node")]
 script = ExtResource("1_gn14e")
-controlled_node = NodePath("..")
+control_node = NodePath("..")
 align_dropped_item = false
 metadata/_edit_lock_ = true
 

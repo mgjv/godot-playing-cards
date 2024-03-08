@@ -32,7 +32,7 @@ func detach_from_current_card():
 	current_card.draggable.dropped.disconnect(_on_card_dropped)
 	current_card = null
 	# Deativate the droppable
-	droppable.controlled_node = home_node
+	droppable.control_node = home_node
 	droppable.active = false
 
 
@@ -50,7 +50,7 @@ func attach_to_card(card: CardUI):
 	current_card.draggable.stop_drag.connect(_on_stop_drag)
 	current_card.draggable.dropped.connect(_on_card_dropped)
 	# Activate the droppable
-	droppable.controlled_node = card
+	droppable.control_node = card
 	droppable.active = true
 	#print("Attached %s to %s" % [get_path().get_name(3), current_card])
 

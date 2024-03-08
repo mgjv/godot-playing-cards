@@ -39,8 +39,8 @@ var _previous_z_index := 0
 
 
 func _on_start_drag():
-	_previous_z_index = draggable.controlled_node.z_index
-	draggable.controlled_node.z_index += UIConfig.z_index_lift
+	_previous_z_index = draggable.control_node.z_index
+	draggable.control_node.z_index += UIConfig.z_index_lift
 	scale_cnode(UIConfig.scale_animation_size)
 
 	
@@ -51,7 +51,7 @@ func _on_stop_drag():
 	# but it will be as long as people don't set the animation
 	# speeds to stupid values.
 	await scale_cnode(1.0)
-	draggable.controlled_node.z_index = _previous_z_index
+	draggable.control_node.z_index = _previous_z_index
 
 
 func _on_dropped(droppable: Droppable):
@@ -62,14 +62,14 @@ func _on_dropped(droppable: Droppable):
 func move_cnode_to(pos: Vector2):
 	var tween: Tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.move_animation_type)
-	tween.tween_property(draggable.controlled_node, "global_position", pos, UIConfig.move_animation_duration)
+	tween.tween_property(draggable.control_node, "global_position", pos, UIConfig.move_animation_duration)
 	# await tween.finished
 	
 
 func scale_cnode(new_scale: float):
 	var tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.scale_animation_type)
-	tween.tween_property(draggable.controlled_node, "scale", new_scale * Vector2.ONE, UIConfig.scale_animation_duration)
+	tween.tween_property(draggable.control_node, "scale", new_scale * Vector2.ONE, UIConfig.scale_animation_duration)
 	await tween.finished
 
 

@@ -8,6 +8,7 @@ extends Area2D
 ## Indicates whether the mouse is over the item
 var hovering := false
 
+
 ## Of all the Hoverables under the mouse, am I the top one?
 func on_top(group: String) -> bool:
 	var group_nodes: Array[Node] = get_tree().get_nodes_in_group(group) \
@@ -17,11 +18,6 @@ func on_top(group: String) -> bool:
 		#print("%s is on top" % self)
 		return true
 	return false
-
-
-func _show_list(draggables: Array[Node]):
-	for d in draggables:
-		print("--- %s: %d" % [d, d.controlled_node.z_index])
 
 
 # Keep track of when the mouse is hovering over us

@@ -7,7 +7,7 @@ extends Hoverable
 ## Handle dragging for any Node2D
 ##
 ## Add this as a child for a node you want to be draggable. Configure the 
-## [member Draggable.controlled_node] to indicate which node you want
+## [member Draggable.control_node] to indicate which node you want
 ## to be the one that gets moved and can be dropped on a [Droppable].
 ##
 ## This component will handle much of the normal movement, animations and 
@@ -17,9 +17,9 @@ extends Hoverable
 ##
 ## Also see [Droppable]
 
-@export var controlled_node : Node2D:
+@export var control_node : Node2D:
 	set(node):
-		controlled_node = node
+		control_node = node
 		update_configuration_warnings()
 
 @export var active := true
@@ -102,7 +102,7 @@ func _process(_delta: float):
 		return
 
 	if dragging:
-		self.controlled_node.global_position = get_global_mouse_position() - offset
+		self.control_node.global_position = get_global_mouse_position() - offset
 
 
 # Process mouse events we're interested in
@@ -142,7 +142,7 @@ func move_to(pos: Vector2):
 	if _move_func:
 		_move_func.call(pos)
 	else:
-		controlled_node.global_position = pos
+		control_node.global_position = pos
 
 # ----- HANDLE DRAGGING BEHAVIOURS ------------------
 
@@ -175,8 +175,8 @@ func _end_drag():
 func _start_drag():
 	if not active:
 		return
-	offset = get_global_mouse_position() - self.controlled_node.global_position
-	drag_position = self.controlled_node.global_position
+	offset = get_global_mouse_position() - self.control_node.global_position
+	drag_position = self.control_node.global_position
 	dragging = true
 	start_drag.emit()
 	if drop_target:
@@ -217,7 +217,7 @@ func _enter_drop_zone(droppable: Droppable):
 	if OS.is_debug_build() and droppable in _droppables:
 		print_debug("Droppable %s is already present in %s" % [droppable, self])
 
-	#print("%s _enter_drop_zone(%s)" % [controlled_node, droppable])
+	#print("%s _enter_drop_zone(%s)" % [control_node, droppable])
 	# If the droppable doean't want us, return
 	if not droppable.can_receive(self):
 		return
@@ -256,9 +256,9 @@ func _on_area_exited(area: Area2D):
 
 
 func _to_string() -> String:
-	if controlled_node and get_path():
+	if control_node and get_path():
 		# Node.name is type StringName not String
-		var cname: String = controlled_node.to_string() if controlled_node.has_method("_to_string") else str(controlled_node.get_path())
+		var cname: String = control_node.to_string() if control_node.has_method("_to_string") else str(control_node.get_path())
 		return "Draggable{%s}" % [cname]
 	else:
 		# If we're not yet in a tree
@@ -267,6 +267,6 @@ func _to_string() -> String:
 
 func _get_configuration_warnings():
 	var warnings = []
-	if !controlled_node:
+	if !control_node:
 		warnings.append("A controlled node needs to be set.\nMost likely you want to select the parent node.")
 	return warnings
