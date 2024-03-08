@@ -2,6 +2,8 @@
 class_name Draggable
 extends Hoverable
 
+# FIXME This is becoming quite complex and big. Amny way to refactor stuff?
+
 ## Handle dragging for any Node2D
 ##
 ## Add this as a child for a node you want to be draggable. Configure the 
@@ -83,11 +85,15 @@ func _ready():
 	area_entered.connect(_on_area_entered)
 	area_exited.connect(_on_area_exited)
 	
+	monitoring = true
+	monitorable = false
+	
 	# Add a DraggableUI node if requested, and if we don't already have one
 	if add_ui and not get_children().filter(func(n): return n is DraggableUI):
 		#print("Adding UI")
 		var draggable_ui = DraggableUI.new()
 		add_child(draggable_ui)
+
 
 
 # Update position while dragging
@@ -140,11 +146,16 @@ func move_to(pos: Vector2):
 
 # ----- HANDLE DRAGGING BEHAVIOURS ------------------
 
-# Called when this Draggable is dropped
+## Em ittedwhen this Draggable is dropped
+##
+## This snal is emitted when the Draggable is dropped on a [Droppable]
+## before the [Droppable] has been mnotified. This allows for any
+## cleanup to happen before the node gets accepted on the 
+## drop side
 func _drop():
 	if drop_target:
-		drop_target.receive_drop(self)
 		dropped.emit(drop_target)
+		drop_target.receive_drop(self)
 	else:
 		cancel_drag()
 	_end_drag()
@@ -206,15 +217,17 @@ func _enter_drop_zone(droppable: Droppable):
 	if OS.is_debug_build() and droppable in _droppables:
 		print_debug("Droppable %s is already present in %s" % [droppable, self])
 
+	#print("%s _enter_drop_zone(%s)" % [controlled_node, droppable])
 	# If the droppable doean't want us, return
 	if not droppable.can_receive(self):
 		return
 	if not droppable in _droppables:
-		#print("Adding %s" % droppable)
+		#print("Adding %s" % droppable.get_path())
 		var previous_drop_target = drop_target
 		_droppables.append(droppable)
 		_droppables.sort_custom(Util.cmp_render_order)
 		_update_drop_target(previous_drop_target, drop_target)
+		#print("%s: my target is now %s out of %d" % [self, drop_target.get_path() as String if drop_target else "<nothing>", _droppables.size()])
 
 
 # Called when we exit a [Droppable]
@@ -224,6 +237,7 @@ func _exit_drop_zone(droppable: Droppable):
 		var previous_drop_target := drop_target
 		_droppables.erase(droppable)
 		_update_drop_target(previous_drop_target, drop_target)
+		#print("My target is now %s out of %d" % [drop_target.get_path() as String if drop_target else "<nothing>", _droppables.size()])
 
 
 # Generic untype signal handler
@@ -240,10 +254,15 @@ func _on_area_exited(area: Area2D):
 
 #-------- SOME BASIC SRTUFF ---------------
 
+
 func _to_string() -> String:
-	# Node.name is type StringName not String
-	var cname: String = self.controlled_node.name if self.controlled_node else &"<null>"
-	return "Draggable{%s}" % cname
+	if controlled_node and get_path():
+		# Node.name is type StringName not String
+		var cname: String = controlled_node.to_string() if controlled_node.has_method("_to_string") else str(controlled_node.get_path())
+		return "Draggable{%s}" % [cname]
+	else:
+		# If we're not yet in a tree
+		return super.to_string()
 
 
 func _get_configuration_warnings():

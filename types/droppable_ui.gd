@@ -25,6 +25,7 @@ func _on_targeted():
 func _on_untargeted():
 	scale_cnode(1.0)
 
+
 func scale_cnode(new_scale: float):
 	var tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.scale_animation_type)
@@ -37,3 +38,11 @@ func _get_configuration_warnings():
 	if not (parent and parent is Droppable):
 		warnings.append("Can only be a child of a Droppable.")
 	return warnings
+
+
+func _to_string():
+	if get_parent():
+		return "UI(%s)" % get_parent()
+	else:
+		# because we might not be in a tree yet
+		return super.to_string()

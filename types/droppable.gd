@@ -8,15 +8,15 @@ extends Area2D
 ## configure that node to [member Droppable.controlled_node]
 ##
 ## If you want to be able to control which nodes can de dropped, define a method 
-## with signature [code]_can_receive_drop(node: Node2D) -> bool[/code]. 
+## with signature 
+##
+## [code]_can_receive_drop(node: Node2D) -> bool[/code].
+##
 ## The [param node] patameter will be the [member Draggable.controlled_node]
 ## member you defined on that side. Return true if you're willing and able to accept
 ## a drop of the given item.
 ## 
 ## To process the actual drop, connect to the [signal Droppable.received_drop].
-##
-## Note that the assumption is that if [code]can_receive()[/code] returned true
-## that you will handle any further movement of the dropped item.
 ##
 ## Also see [Draggable] for the other half of the story.
 
@@ -31,19 +31,19 @@ extends Area2D
 ## Are we actively listening for drops
 @export var active := true
 
-## Whether to align the dropped item with this drop target 
-## when dropped. 
+
+## Whether to automatically align the dropped item with [member controlled_node]
 ##
-## Set this to false if you want to handle the 
-## alignment animation yourself.
+## If true, this will change the global_position of the dropped item
+## to that of the [member controlled_node], possibly with an animation. 
+## If you want to handle moving the item yourself, set this to false.
 ##
 ## This provides symmetry for the case where a Draggable is dropped
 ## outside of a suitable target (which wil autmatically move it back
 ## to where it was picked up).
 ##
-## Note that the dropped item remains in the same place in the scene tree.
-## You need to handle that stuff yourself by implementing a handler
-## for [signal Droppable.received_drop]
+## Note that this [i]does not[/i] change the p[osition in the scene tree.
+## You have to do that yourself.
 @export var align_dropped_item := true
 
 ## Whether to automatically add a DroppableUI node
@@ -77,26 +77,44 @@ func _ready():
 	# Connect to the detection signals
 	#area_entered.connect(_on_area_entered)
 	#area_exited.connect(_on_area_exited)
+	monitoring = false
+	monitorable = true
 	
 	# Add a DraggableUI node if requested, and if we don't already have one
 	if add_ui and not get_children().filter(func(n): return n is DroppableUI):
 		var droppable_ui = DroppableUI.new()
 		add_child(droppable_ui)
 
+# Allow can_receive to be overriddedn from outside of the 
+# controlled_node as well
+var _override_can_receive: Callable
 
 ## Determine whether this DragDropController can receive
 ## the given item from a drop. This uses the configuration
 ## of this DragDropController, and the logic possibly implemented 
 ## in the can_drop() method of the controlled node
+##
+## The order in which decisions are made is
+## - [member _override_can_receive]()
+## - [member _controlled_node][code]._can_receive()[/code]
+## - [member active]
 func can_receive(draggable: Draggable) -> bool:
 	#print("%s reporting to %s" % [self, draggable])
 	if not active:
 		return false
+	
+	# We don't want to drop something on ourselves
+	if controlled_node == draggable.controlled_node:
+		return false
 
+	# If an overriden can_receive method is implemented, use it
+	if _override_can_receive:
+		return _override_can_receive.call(draggable.controlled_node)
+		
 	# If there is no controlled node, assume all draggables are valid
 	if not controlled_node.has_method("_can_receive_drop"):
-		return true
-		
+		return active # which is always true here
+	
 	return controlled_node._can_receive_drop(draggable.controlled_node)
 
 
@@ -120,20 +138,25 @@ func target(_draggable: Draggable):
 
 ## Called by [Draggable] when we're no longer the drop target
 func untarget(_draggable: Draggable):
-		#print("%s is no longer targeted by %s" % [self, _draggable])
-		untargeted.emit()
+	#print("%s is no longer targeted by %s" % [self, _draggable])
+	untargeted.emit()
 
 
 # ----- Some basics ----------
 
+
 func _to_string() -> String:
-	# Node.name is type StringName not String
-	var cname: String = controlled_node.name if controlled_node else &"<null>"
-	return "Droppable{%s}" % cname
+	if controlled_node and get_path():
+		# Node.name is type StringName not String
+		var cname: String = controlled_node.to_string() if controlled_node.has_method("_to_string") else str(controlled_node.get_path())
+		return "Droppable{%s}" % [cname]
+	else:
+		# If we're not yet in a tree
+		return super.to_string()
 
 
 func _get_configuration_warnings():
 	var warnings = []
 	if !controlled_node:
-		warnings.append("A controlled node needs to be set.\nMost likely you want to select the parent node.")
+		warnings.append("You must configure a controlled node.\nMost likely you want to select the parent node.")
 	return warnings

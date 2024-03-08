@@ -64,6 +64,14 @@ func is_next(other: Card, ace_is_low = true) -> bool:
 	else:
 		return false
 
+
+## Returns true if this card is previous in order and of the same suit
+## 
+## Also see [method is_next]
+func is_previous(other: Card, ace_is_low = true) -> bool:
+	return other.is_next(self, ace_is_low)
+
+
 ## Returns true if this card is next in order and of a different colour
 ## 
 ## This one is common for solitaire games
@@ -76,6 +84,13 @@ func is_next_rb(other: Card, ace_is_low = true) -> bool:
 		return true
 	else:
 		return false
+
+
+## Returns true if this card is previous in order and of a different colour
+## 
+## Also see [method is_next_rb]
+func is_previous_rb(other: Card, ace_is_low = true) -> bool:
+	return other.is_next_rb(self, ace_is_low)
 
 
 func _to_string() -> String:

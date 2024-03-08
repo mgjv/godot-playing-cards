@@ -28,6 +28,7 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SmallCard/Draggable"]
+visible = false
 shape = SubResource("RectangleShape2D_sfms2")
 metadata/_edit_lock_ = true
 
@@ -45,6 +46,7 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Card/Draggable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
 
@@ -70,6 +72,7 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/AlwaysDropper/Droppable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
 
@@ -89,6 +92,7 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/NoDropper/Droppable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
 
@@ -108,6 +112,7 @@ controlled_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/YesDropper/Droppable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
 
@@ -128,6 +133,7 @@ active = false
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/InactiveDropper/Droppable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 metadata/_edit_lock_ = true
 
@@ -136,6 +142,7 @@ script = ExtResource("9_xn31u")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Droppers/InactiveDropper/Clickable"]
+visible = false
 shape = ExtResource("4_fq5y8")
 
 [connection signal="received_drop" from="Droppers/AlwaysDropper/Droppable" to="Droppers/AlwaysDropper" method="_on_droppable_received_drop"]

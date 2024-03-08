@@ -16,3 +16,10 @@ from a [playing cards category](https://commons.wikimedia.org/wiki/Category:SVG_
 on [WikliMedia Commons](https://commons.wikimedia.org/wiki/Main_Page), so get your artwork there.
 Another possible source is this [card customiser](https://www.me.uk/cards/), which produces really 
 nice results.
+
+
+## To Do
+
+- Various TODO items all over the code
+- Move control over whether card is open or closed to CardStackUI
+  as stacks should either be fully open or fully closed

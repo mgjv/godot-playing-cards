@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://crkum6arn7pug"]
+[gd_scene load_steps=66 format=3 uid="uid://crkum6arn7pug"]
 
 [ext_resource type="Script" path="res://scenes/card_ui.gd" id="1_ha8ee"]
 [ext_resource type="Script" path="res://types/draggable.gd" id="2_56qcl"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_3eoqj"]
 [ext_resource type="Script" path="res://scenes/card_ui_front.gd" id="3_w38r2"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="3_wdxe4"]
-[ext_resource type="Script" path="res://types/droppable.gd" id="4_yyog2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lf5hr"]
 atlas = ExtResource("2_p2t3u")
@@ -453,27 +452,39 @@ resource_name = "flip_card"
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Back:visible")
-tracks/0/interp = 0
+tracks/0/enabled = false
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.55, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [true, true, false, false]
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.1, 1), Vector2(1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath(".:scale")
-tracks/1/interp = 2
+tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(3, 0.3333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.1, 1), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(1, 0.1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Back:visible")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, true, false, false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0gdh1"]
@@ -484,27 +495,6 @@ _data = {
 
 [node name="CardUI" type="Node2D"]
 script = ExtResource("1_ha8ee")
-
-[node name="Draggable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("2_56qcl")
-controlled_node = NodePath("..")
-active = false
-metadata/_edit_lock_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Draggable"]
-visible = false
-shape = ExtResource("3_wdxe4")
-metadata/_edit_lock_ = true
-
-[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("4_yyog2")
-controlled_node = NodePath("..")
-active = false
-metadata/_edit_lock_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Droppable"]
-visible = false
-shape = ExtResource("3_wdxe4")
 
 [node name="Front" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_cg6vg")
@@ -520,4 +510,14 @@ metadata/_edit_lock_ = true
 libraries = {
 "": SubResource("AnimationLibrary_0gdh1")
 }
-speed_scale = 10.0
+
+[node name="Draggable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
+script = ExtResource("2_56qcl")
+controlled_node = NodePath("..")
+active = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Draggable"]
+visible = false
+shape = ExtResource("3_wdxe4")
+metadata/_edit_lock_ = true

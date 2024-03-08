@@ -1,38 +1,67 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmrefjqqgcpol"]
+[gd_scene load_steps=8 format=3 uid="uid://dmrefjqqgcpol"]
 
 [ext_resource type="Script" path="res://scenes/build_pile.gd" id="1_5ta7e"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="1_8aqd8"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="1_gn14e"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="2_27rx1"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="2_dduda"]
+[ext_resource type="Script" path="res://scenes/build_pile_card_droppable.gd" id="4_lc5lp"]
 [ext_resource type="Script" path="res://types/card_counter.gd" id="6_tmtpw"]
 
 [node name="BuildPile" type="Node2D"]
 script = ExtResource("1_5ta7e")
-
-[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
-script = ExtResource("1_gn14e")
-controlled_node = NodePath("..")
-active = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Droppable"]
-visible = false
-shape = ExtResource("2_dduda")
+metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="."]
 script = ExtResource("1_8aqd8")
+metadata/_edit_lock_ = true
 
 [node name="ClosedCards" type="Node2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("2_27rx1")
+metadata/_edit_lock_ = true
 
 [node name="OpenCards" type="Node2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("2_27rx1")
+open = true
+metadata/_edit_lock_ = true
 
 [node name="ClosedCardsCounter" type="Node2D" parent="." node_paths=PackedStringArray("stack")]
 script = ExtResource("6_tmtpw")
 stack = NodePath("../ClosedCards")
+metadata/_edit_lock_ = true
 
 [node name="OpenCardsCounter" type="Node2D" parent="." node_paths=PackedStringArray("stack")]
 script = ExtResource("6_tmtpw")
 stack = NodePath("../OpenCards")
 offset = Vector2(0, 25)
+metadata/_edit_lock_ = true
+
+[node name="CardDroppable" type="Node2D" parent="."]
+script = ExtResource("4_lc5lp")
+metadata/_edit_lock_ = true
+
+[node name="Droppable" type="Area2D" parent="CardDroppable" node_paths=PackedStringArray("controlled_node")]
+script = ExtResource("1_gn14e")
+controlled_node = NodePath("..")
+active = false
+align_dropped_item = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardDroppable/Droppable"]
+shape = ExtResource("2_dduda")
+debug_color = Color(1, 0, 0, 0.717647)
+
+[node name="Droppable" type="Area2D" parent="." node_paths=PackedStringArray("controlled_node")]
+script = ExtResource("1_gn14e")
+controlled_node = NodePath("..")
+align_dropped_item = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Droppable"]
+shape = ExtResource("2_dduda")
+
+[connection signal="stack_changed" from="OpenCards" to="." method="_on_open_cards_stack_changed"]
+[connection signal="received_drop" from="CardDroppable/Droppable" to="." method="_on_received_drop"]
+[connection signal="received_drop" from="Droppable" to="." method="_on_received_drop"]

@@ -23,6 +23,10 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 	
+	if not get_parent() is Draggable:
+		push_error("Parent is not a Draggable! Exiting")
+		queue_free()
+	
 	draggable.start_drag.connect(_on_start_drag)
 	draggable.stop_drag.connect(_on_stop_drag)
 	draggable.dropped.connect(_on_dropped)
@@ -59,7 +63,8 @@ func move_cnode_to(pos: Vector2):
 	var tween: Tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.move_animation_type)
 	tween.tween_property(draggable.controlled_node, "global_position", pos, UIConfig.move_animation_duration)
-
+	# await tween.finished
+	
 
 func scale_cnode(new_scale: float):
 	var tween = get_tree().create_tween()
@@ -74,3 +79,11 @@ func _get_configuration_warnings():
 	if not (parent and parent is Draggable):
 		warnings.append("Can only be a child of a Draggable.")
 	return warnings
+
+
+func _to_string():
+	if get_parent():
+		return "UI(%s)" % get_parent()
+	else:
+		# because we might not be in a tree yet
+		return super.to_string()
