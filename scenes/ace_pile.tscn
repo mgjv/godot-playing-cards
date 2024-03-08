@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://nhc2no6rgyca"]
 
-[ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="1_8u01d"]
+[ext_resource type="Script" path="res://types/card_stack_ui.gd" id="1_8u01d"]
 [ext_resource type="Script" path="res://scenes/ace_pile.gd" id="1_vfu16"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="2_3a5d8"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="3_8xaba"]
-[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="5_3xnlr"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://resources/standard_collision_rectangle.tres" id="5_3xnlr"]
 [ext_resource type="Script" path="res://types/card_counter.gd" id="6_n31ay"]
 
 [node name="AcePile" type="Node2D"]

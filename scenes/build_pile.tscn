@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scenes/build_pile.gd" id="1_5ta7e"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="1_8aqd8"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="1_gn14e"]
-[ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="2_27rx1"]
-[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="2_dduda"]
+[ext_resource type="Script" path="res://types/card_stack_ui.gd" id="2_27rx1"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://resources/standard_collision_rectangle.tres" id="2_dduda"]
 [ext_resource type="Script" path="res://scenes/build_pile_card_droppable.gd" id="4_lc5lp"]
 [ext_resource type="Script" path="res://types/card_counter.gd" id="6_tmtpw"]
 

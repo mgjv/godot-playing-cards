@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cwxemuwbvdtjh" path="res://assets/Color 52 Faces v2.0.png" id="2_p2t3u"]
 [ext_resource type="Texture2D" uid="uid://tso2qs0ew35j" path="res://assets/Card back.png" id="3_3eoqj"]
 [ext_resource type="Script" path="res://scenes/card_ui_front.gd" id="3_w38r2"]
-[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="3_wdxe4"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://resources/standard_collision_rectangle.tres" id="3_wdxe4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lf5hr"]
 atlas = ExtResource("2_p2t3u")
