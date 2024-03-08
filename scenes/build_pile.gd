@@ -2,7 +2,11 @@
 class_name BuildPile
 extends Node2D
 
-@export var source_deck : CardStackUI
+@export var source_deck : FullCardStackUI:
+	set(s):
+		source_deck = s
+		update_configuration_warnings()
+
 @export var initial_number_of_cards := 1
 
 @onready var closed: CardStackUI = $ClosedCards

@@ -22,8 +22,6 @@ extends Node2D
 ## Is this a stack of cards facing up (open) or down (closed)
 @export var open := false
 
-## Whether this stack should initialise itself with a full randomised deck
-@export var initialise_full_deck := false
 
 # TODO Implement signals when the card stack changes?
 #      because cards can be taken off the stack without
@@ -45,22 +43,6 @@ const GROUP = "card_stacks"
 
 func _ready():
 	add_to_group(GROUP)
-	if initialise_full_deck:
-		add_full_deck()
-
-
-## Add a full deck of cards to this stack
-##
-## By default the deck will be randomly shuffled. Set the 
-## [param shuffle] argument to false to prevent this
-func add_full_deck(shuffle := true):
-	var deck = Deck.new()
-	if shuffle:
-		deck.shuffle()
-	for card in deck.cards:
-		var new_card := CardUI.new_instance(self, card)
-		_add_card(new_card)
-	stack_changed.emit(true)
 
 
 ## Called when a card is taken from this stack by anmother stack
@@ -78,6 +60,7 @@ func add_card(card: CardUI):
 	_add_card(card)
 	stack_changed.emit(true)
 
+# TODO Check and maybe fix for hierarchical stack
 # Private version of add_card, to avoid 
 func _add_card(card: CardUI):
 	#print("%s adding card %s" % [get_path(), card])
@@ -98,7 +81,7 @@ func _add_card(card: CardUI):
 	# Hierarchical stacks?
 	await card.move_to(global_position)
 
-
+# TODO Fix for hierarchical stack
 ## Get an array of the cards in this stack
 ##
 ## This may be useful if you want to iterate over them, maybe to 
@@ -109,7 +92,7 @@ func cards() -> Array[CardUI]:
 		_cards.append(n)
 	return _cards
 
-
+# TODO Fix for hierarchical stack
 ## How many cards are on the stack?
 func size() -> int:
 	# TODO We should ensure that we never have children that are not
@@ -121,7 +104,7 @@ func size() -> int:
 func is_empty() -> bool:
 	return get_child_count() == 0
 
-
+# TODO Fix for hierarchical stack
 ## Get the top card
 func top_card() -> CardUI:
 	return get_child(-1)

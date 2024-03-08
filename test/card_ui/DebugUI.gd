@@ -1,6 +1,8 @@
 extends CanvasLayer
 
-@onready var deck := %DeckPile/CardStackUI
+# Debug UI for the TestCardUI test
+
+@onready var deck := %DeckPile/FullCardStackUI
 
 func _ready():
 	add_to_group(UIConfig.DEBUG_GROUP)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://du4newbmp1yhh"]
+[gd_scene load_steps=14 format=3 uid="uid://du4newbmp1yhh"]
 
 [ext_resource type="Script" path="res://scenes/table.gd" id="1_f8l65"]
 [ext_resource type="PackedScene" uid="uid://nhc2no6rgyca" path="res://scenes/ace_pile.tscn" id="1_tpq8u"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dmrefjqqgcpol" path="res://scenes/build_pile.tscn" id="3_ybc8y"]
 [ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://scenes/standard_collision_rectangle.tres" id="4_aqs2s"]
 [ext_resource type="Script" path="res://scenes/discard_pile.gd" id="4_wph20"]
+[ext_resource type="Script" path="res://scenes/full_card_stack_ui.gd" id="5_qwtbq"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="7_430qs"]
 [ext_resource type="Script" path="res://scenes/deck_pile.gd" id="7_nmnyn"]
 [ext_resource type="Script" path="res://scenes/card_stack_ui.gd" id="7_yo108"]
@@ -20,7 +21,7 @@ metadata/_edit_lock_ = true
 [node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack")]
 position = Vector2(1025, 335)
 script = ExtResource("2_5bs4a")
-deck = NodePath("DeckPile/CardStackUI")
+deck = NodePath("DeckPile/FullCardStackUI")
 stack = NodePath("DiscardPile/CardStackUI")
 metadata/_edit_lock_ = true
 
@@ -36,10 +37,8 @@ script = ExtResource("3_k7tfe")
 type = 1
 metadata/_edit_lock_ = true
 
-[node name="CardStackUI" type="Node2D" parent="Dealer/DeckPile"]
-script = ExtResource("7_yo108")
-initialise_full_deck = true
-metadata/_edit_lock_ = true
+[node name="FullCardStackUI" type="Node2D" parent="Dealer/DeckPile"]
+script = ExtResource("5_qwtbq")
 
 [node name="CardCounter" type="Node2D" parent="Dealer/DeckPile"]
 script = ExtResource("9_q1awn")
@@ -78,36 +77,36 @@ metadata/_edit_lock_ = true
 
 [node name="BuildPile1" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(50, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 
 [node name="BuildPile2" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(175, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 2
 
 [node name="BuildPile3" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(300, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 3
 
 [node name="BuildPile4" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(425, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 4
 
 [node name="BuildPile5" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(550, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 5
 
 [node name="BuildPile6" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(675, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 6
 
 [node name="BuildPile7" parent="BuildPiles" node_paths=PackedStringArray("source_deck") instance=ExtResource("3_ybc8y")]
 position = Vector2(800, 70)
-source_deck = NodePath("../../Dealer/DeckPile/CardStackUI")
+source_deck = NodePath("../../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 7
 
 [node name="AcePiles" type="Node2D" parent="."]

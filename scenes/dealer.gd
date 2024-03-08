@@ -8,7 +8,7 @@ extends Node2D
 ##
 ## This should be comnfigured to initialise itself with a 
 ## full deck
-@export var deck: CardStackUI:
+@export var deck: FullCardStackUI:
 	set(s):
 		deck = s
 		update_configuration_warnings()

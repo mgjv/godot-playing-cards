@@ -1,5 +1,5 @@
 extends Node2D
 
-@onready var stack: CardStackUI = $CardStackUI
+@onready var stack: CardStackUI = $FullCardStackUI
 
 

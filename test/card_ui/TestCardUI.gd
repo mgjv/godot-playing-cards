@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var deck: CardStackUI = %DeckPile/CardStackUI
+@onready var deck: CardStackUI = %DeckPile/FullCardStackUI
 @onready var end_pile: CardStackUI = %EndPile/CardStackUI
 
 func _ready():
