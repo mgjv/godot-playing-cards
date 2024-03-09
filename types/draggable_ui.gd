@@ -1,4 +1,5 @@
 @tool
+@icon("res://icons/draggable.svg")
 class_name DraggableUI
 extends Node
 

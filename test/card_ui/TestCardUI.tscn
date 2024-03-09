@@ -1,6 +1,5 @@
-[gd_scene load_steps=16 format=3 uid="uid://cu58tpewaxoyb"]
+[gd_scene load_steps=14 format=3 uid="uid://cu58tpewaxoyb"]
 
-[ext_resource type="Script" path="res://test/card_ui/TestCardUI.gd" id="1_klbmj"]
 [ext_resource type="Script" path="res://types/dealer.gd" id="2_rbqph"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="2_wqwfg"]
 [ext_resource type="Script" path="res://types/card_stack_ui.gd" id="3_1euxr"]
@@ -13,11 +12,9 @@
 [ext_resource type="Script" path="res://test/card_ui/DebugUI.gd" id="8_f8pom"]
 [ext_resource type="Script" path="res://test/card_ui/SinkPile.gd" id="9_k7kv4"]
 [ext_resource type="Script" path="res://types/droppable.gd" id="10_l6h85"]
-[ext_resource type="Script" path="res://test/card_ui/HierarchyPile.gd" id="13_52dcx"]
 [ext_resource type="Script" path="res://types/hierarchical_card_stack_ui.gd" id="14_rgwli"]
 
 [node name="TestCardUI" type="Node2D"]
-script = ExtResource("1_klbmj")
 metadata/_edit_lock_ = true
 
 [node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack", "clickable")]
@@ -105,7 +102,6 @@ metadata/_edit_lock_ = true
 
 [node name="HierarchyPile" type="Node2D" parent="."]
 position = Vector2(650, 150)
-script = ExtResource("13_52dcx")
 
 [node name="EmptySpot" type="Node2D" parent="HierarchyPile"]
 script = ExtResource("2_wqwfg")

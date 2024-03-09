@@ -1,4 +1,5 @@
 @tool
+@icon("res://icons/empty_spot.svg")
 class_name EmptySpot
 extends Node2D
 

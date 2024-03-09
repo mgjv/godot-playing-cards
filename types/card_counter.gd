@@ -1,3 +1,4 @@
+@icon("res://icons/counter.svg")
 class_name CardCounter
 extends Node2D
 

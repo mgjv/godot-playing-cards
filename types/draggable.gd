@@ -1,4 +1,5 @@
 @tool
+@icon("res://icons/draggable.svg")
 class_name Draggable
 extends Hoverable
 

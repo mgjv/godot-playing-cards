@@ -1,3 +1,4 @@
+@icon("res://icons/clickable.svg")
 class_name Clickable
 extends Hoverable
 

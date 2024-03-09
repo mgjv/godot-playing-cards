@@ -1,4 +1,5 @@
 @tool
+@icon("res://icons/droppable.svg")
 class_name DroppableUI
 extends Node
 

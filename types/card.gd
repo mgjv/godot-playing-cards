@@ -1,3 +1,4 @@
+@icon("res://icons/card.svg")
 class_name Card
 extends Resource
 
