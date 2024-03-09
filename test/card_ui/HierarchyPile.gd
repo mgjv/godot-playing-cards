@@ -1,16 +1,13 @@
 extends Node2D
 
-@onready var stack = $CardStackUI
+@onready var stack : CardStackUI = $HierarchicalCardStackUI
 
 func _on_droppable_received_drop(node):
-	var card: CardUI = node as CardUI
-	stack.add_card(card)
-
-
+	stack.add_card(node as CardUI)
+	
+	
 func _can_receive_drop(node: Node2D) -> bool:
 	var card: CardUI = node as CardUI
-	# Do not accept stacks of cards
-	if card.has_child_card():
+	if stack.has_card(card):
 		return false
-	
 	return true

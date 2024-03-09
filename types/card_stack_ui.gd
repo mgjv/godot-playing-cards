@@ -16,21 +16,11 @@ extends Node2D
 ## as a hierarchy. This generally means that when you pick up a 
 ## child in the middle, that you also get all opf its children.
 ##
-## TODO implement
-@export var hierarchical := false
+
 
 ## Is this a stack of cards facing up (open) or down (closed)
 @export var open := false
 
-
-# TODO Implement signals when the card stack changes?
-#      because cards can be taken off the stack without
-#      going through a method here, we probably need to 
-#      handlers for the child_order_changed signal. This
-#      will be hard for hierarchical stacks
-#
-#		Another alternative is to only allow add_card
-# 		to move cards between stacks.
 
 ## Emitted when the stack changes
 ##
@@ -42,6 +32,7 @@ signal stack_changed(added: bool)
 const GROUP = "card_stacks"
 
 func _ready():
+	#print("%s ready" % get_path())
 	add_to_group(GROUP)
 
 
@@ -60,28 +51,37 @@ func add_card(card: CardUI):
 	_add_card(card)
 	stack_changed.emit(true)
 
-# TODO Check and maybe fix for hierarchical stack
-# Private version of add_card, to avoid 
+
 func _add_card(card: CardUI):
 	#print("%s adding card %s" % [get_path(), card])
-	if card.get_parent():
-		var old_stack := card.stack
-		card.reparent(self)
-		card.stack = self
+	var old_stack := card.stack
+	
+	_add_card_as_child_and_move(card)
+	
+	card.stack = self
+	# Inform the previous stack, if there was one
+	if old_stack:
 		old_stack._lost_card(card)
-	else:
-		add_child(card)
-
+	
 	if self.open:
 		card.open()
 	else:
 		card.close()
-	
-	# TODO Need to take offsets into account for 
-	# Hierarchical stacks?
-	await card.move_to(global_position)
 
-# TODO Fix for hierarchical stack
+
+# actually place the child in the stack
+# this is a separate function so it can be easily overriden
+func _add_card_as_child_and_move(card):
+	if card.get_parent():
+		# Use reparent here instead of remove_child()
+		# followed by add_child() to preserve the global_position
+		card.reparent(self, true)
+	else:
+		add_child(card)
+	
+	card.move_to(global_position)
+
+
 ## Get an array of the cards in this stack
 ##
 ## This may be useful if you want to iterate over them, maybe to 
@@ -92,7 +92,12 @@ func cards() -> Array[CardUI]:
 		_cards.append(n)
 	return _cards
 
-# TODO Fix for hierarchical stack
+## Returns true is the given card is in this stack
+##
+func has_card(card: CardUI) -> bool:
+	return is_ancestor_of(card)
+	
+
 ## How many cards are on the stack?
 func size() -> int:
 	# TODO We should ensure that we never have children that are not
@@ -101,10 +106,12 @@ func size() -> int:
 
 
 ## Is this card stack empty?
+# This should work for any implementation that only has 
+# CardUI children, no matter how they're organised
 func is_empty() -> bool:
 	return get_child_count() == 0
 
-# TODO Fix for hierarchical stack
+
 ## Get the top card
 func top_card() -> CardUI:
 	return get_child(-1)

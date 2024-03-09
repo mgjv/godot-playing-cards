@@ -3,6 +3,11 @@ class_name Dealer
 extends Node2D
 
 ## Manage two piles for dealing
+##
+## Add this to your node tree. Configure a source deck 
+## ([FullCardStackUI)] and a stack to turn the cards onto
+## ([CardStackUI)], and the [Clickable]
+## that catches a click on the source deck
 
 ## The cdeck to take cards from. 
 ##
@@ -13,7 +18,6 @@ extends Node2D
 		deck = s
 		update_configuration_warnings()
 
-
 ## The stack to turn 
 @export var stack: CardStackUI:
 	set(s):
@@ -21,13 +25,23 @@ extends Node2D
 		update_configuration_warnings()
 
 
+## The clickable to connect to
+@export var clickable: Clickable:
+	set(c):
+		clickable = c
+		update_configuration_warnings()
+
+
+
 func _ready():
 	if Engine.is_editor_hint():
 		#_check_config_repeat()
 		return
 	
-	if not deck or not stack:
+	if not deck or not stack or not clickable:
 		print_debug("Dealer %s not configured correctly!")
+		
+	clickable.click.connect(_on_deck_click)
 
 
 # Turn over the top card
@@ -77,10 +91,13 @@ func _get_configuration_warnings():
 			warnings.append("Attached deck will not initialise itself")
 		if deck.open:
 			warnings.append("Attached deck should not be open")
+
 	if !stack:
 		warnings.append("I need a stack to be configured.")
 	else:
 		if not stack.open:
 			warnings.append("Attached stack should be open")
 
+	if !clickable:
+		warnings.append("I need a clickable to be configured.")
 	return warnings

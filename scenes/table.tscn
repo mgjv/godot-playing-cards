@@ -18,11 +18,12 @@
 script = ExtResource("1_f8l65")
 metadata/_edit_lock_ = true
 
-[node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack")]
+[node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack", "clickable")]
 position = Vector2(1025, 335)
 script = ExtResource("2_5bs4a")
 deck = NodePath("DeckPile/FullCardStackUI")
-stack = NodePath("DiscardPile/CardStackUI")
+stack = NodePath("StackPile/CardStackUI")
+clickable = NodePath("DeckPile/Clickable")
 metadata/_edit_lock_ = true
 
 [node name="DeckPile" type="Node2D" parent="Dealer"]
@@ -34,7 +35,7 @@ metadata/_edit_lock_ = true
 [node name="EmptySpot" type="Node2D" parent="Dealer/DeckPile"]
 z_index = -5
 script = ExtResource("3_k7tfe")
-type = 1
+type = 6
 metadata/_edit_lock_ = true
 
 [node name="FullCardStackUI" type="Node2D" parent="Dealer/DeckPile"]
@@ -52,23 +53,23 @@ visible = false
 shape = ExtResource("4_aqs2s")
 metadata/_edit_lock_ = true
 
-[node name="DiscardPile" type="Node2D" parent="Dealer"]
+[node name="StackPile" type="Node2D" parent="Dealer"]
 unique_name_in_owner = true
 position = Vector2(50, 70)
 script = ExtResource("4_wph20")
 metadata/_edit_lock_ = true
 
-[node name="EmptySpot" type="Node2D" parent="Dealer/DiscardPile"]
+[node name="EmptySpot" type="Node2D" parent="Dealer/StackPile"]
 script = ExtResource("3_k7tfe")
-type = 4
+type = 3
 metadata/_edit_lock_ = true
 
-[node name="CardStackUI" type="Node2D" parent="Dealer/DiscardPile"]
+[node name="CardStackUI" type="Node2D" parent="Dealer/StackPile"]
 script = ExtResource("7_yo108")
 open = true
 metadata/_edit_lock_ = true
 
-[node name="CardCounter" type="Node2D" parent="Dealer/DiscardPile"]
+[node name="CardCounter" type="Node2D" parent="Dealer/StackPile"]
 script = ExtResource("9_q1awn")
 
 [node name="BuildPiles" type="Node2D" parent="."]
@@ -148,5 +149,4 @@ alignment = 1
 layout_mode = 2
 text = "NEW DECK"
 
-[connection signal="click" from="Dealer/DeckPile/Clickable" to="Dealer" method="_on_deck_click"]
 [connection signal="pressed" from="DebugUI/VBoxContainer/HBoxContainer/NewDeckButton" to="DebugUI" method="_on_new_deck_button_pressed"]

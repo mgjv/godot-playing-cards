@@ -44,7 +44,7 @@ extends Area2D
 ##
 ## Note that this [i]does not[/i] change the p[osition in the scene tree.
 ## You have to do that yourself.
-@export var align_dropped_item := true
+@export var align_dropped_item := false
 
 ## Whether to automatically add a DroppableUI node
 ##

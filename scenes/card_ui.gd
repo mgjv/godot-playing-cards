@@ -21,8 +21,6 @@ var card: Card
 ## The stack the card currentl;y is in
 var stack: CardStackUI
 
-const my_scene: PackedScene = preload("res://scenes/card_ui.tscn")
-
 ## The preferred constructor for this scene/class
 #
 ## This class shouldn'[t be used outside of the scene, and the scene shouldn't be 
@@ -32,9 +30,13 @@ static func new_instance(
 			_stack: CardStackUI, 
 			_card: Card
 		) -> CardUI:
+	# FIXME I can't seem to be able top ruse preload here
+	# 
+	var my_scene: PackedScene = load("res://scenes/card_ui.tscn")
 	var new_card_ui: CardUI = my_scene.instantiate() as CardUI
 	new_card_ui.stack = _stack
 	new_card_ui.card = _card
+	new_card_ui.name = new_card_ui.to_string()
 	return new_card_ui
 
 
@@ -87,6 +89,39 @@ func flip():
 		open()
 	else:
 		close()
+
+
+# ---- Methods to deal with hierarchical stacks of cards
+# ----- For flexibility we will allow multiple children
+# ----- even though we don't need them yet
+#
+# ----- These functions mirror some of the [Node] functions
+
+# For adding and removing, add_child() and remove_child() 
+# can be used. No special handling required
+
+## Get all the child cards
+##
+## Used by the hierarchical card stacks
+func get_child_cards() -> Array[CardUI]:
+	var out: Array[CardUI] = []
+	for c in get_children().filter(func(n): return n is CardUI):
+		out.append(c)
+	return out
+
+
+## Does this card have child cards?
+##
+## Used by the hierarchical card stacks
+func has_child_card() -> bool:
+	return not get_child_cards().is_empty()
+
+
+## How many child cards does this array have?
+##
+## Used by the hierarchical card stacks
+func get_child_card_count() -> int:
+	return not get_child_cards().size()
 
 
 # When debugging is enabled, this allows
