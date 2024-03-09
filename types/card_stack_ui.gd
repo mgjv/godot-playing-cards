@@ -96,7 +96,8 @@ func cards() -> Array[CardUI]:
 ## Returns true is the given card is in this stack
 ##
 func has_card(card: CardUI) -> bool:
-	return is_ancestor_of(card)
+	#return is_ancestor_of(card)
+	return card.stack == self
 	
 
 ## How many cards are on the stack?

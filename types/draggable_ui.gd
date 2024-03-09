@@ -64,7 +64,7 @@ func move_cnode_to(pos: Vector2):
 	var tween: Tween = get_tree().create_tween()
 	tween.set_trans(UIConfig.move_animation_type)
 	tween.tween_property(draggable.control_node, "global_position", pos, UIConfig.move_animation_duration)
-	# await tween.finished
+	await tween.finished
 	
 
 func scale_cnode(new_scale: float):

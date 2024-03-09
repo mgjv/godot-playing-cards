@@ -19,8 +19,11 @@ const flip_animation_name := "flip_card"
 ## The card that this UI is currently representing
 var card: Card
 
-## The stack the card currentl;y is in
+## The stack the card currently is in
 var stack: CardStackUI
+
+## True if the card is still moving
+var moving := false
 
 ## The preferred constructor for this scene/class
 #
@@ -46,10 +49,14 @@ func _ready():
 
 ## Move the card to this location
 ##
-## This is cpnrolled by the draggable, so see the configuration
+## This is controlled by the draggable, so see the configuration
 ## of the animation over there.
 func move_to(pos: Vector2):
+	#print("Start move")
+	moving = true
 	await draggable.move_to(pos)
+	moving = false
+	#print("End move")
 
 # --- VISUAL STUFF -----
 
@@ -91,6 +98,11 @@ func flip():
 	else:
 		close()
 
+
+## Returns true if thios card is in the given stack
+func is_in_stack(s: CardStackUI) -> bool:
+	#return s.is_ancestor_of(card)
+	return s == stack
 
 # ---- Methods to deal with hierarchical stacks of cards
 # ----- For flexibility we will allow multiple children

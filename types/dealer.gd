@@ -52,7 +52,6 @@ func _turn_top_card():
 		card.open()
 		card.draggable.active = true
 		stack.add_card(card)
-		card.move_to(stack.global_position)
 
 
 # Flip the cards from the stack back to the deck

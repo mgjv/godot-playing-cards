@@ -141,7 +141,7 @@ var _move_func: Callable
 func move_to(pos: Vector2):
 	#print("Moving to %s" % pos)
 	if _move_func:
-		_move_func.call(pos)
+		await _move_func.call(pos)
 	else:
 		control_node.global_position = pos
 

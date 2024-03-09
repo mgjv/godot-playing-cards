@@ -1,25 +1,26 @@
-[gd_scene load_steps=14 format=3 uid="uid://cu58tpewaxoyb"]
+[gd_scene load_steps=15 format=3 uid="uid://cu58tpewaxoyb"]
 
-[ext_resource type="Script" path="res://types/dealer.gd" id="2_rbqph"]
-[ext_resource type="Script" path="res://types/empty_spot.gd" id="2_wqwfg"]
-[ext_resource type="Script" path="res://types/card_stack_ui.gd" id="3_1euxr"]
-[ext_resource type="Script" path="res://types/clickable.gd" id="4_uu4d4"]
-[ext_resource type="Script" path="res://types/full_card_stack_ui.gd" id="5_i2bob"]
-[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://resources/standard_collision_rectangle.tres" id="5_rqi81"]
-[ext_resource type="Script" path="res://test/card_ui/EndPile.gd" id="6_3egg2"]
-[ext_resource type="Script" path="res://types/card_counter.gd" id="6_gmpji"]
-[ext_resource type="PackedScene" uid="uid://dmrefjqqgcpol" path="res://scenes/build_pile.tscn" id="8_e2exb"]
-[ext_resource type="Script" path="res://test/card_ui/DebugUI.gd" id="8_f8pom"]
-[ext_resource type="Script" path="res://test/card_ui/SinkPile.gd" id="9_k7kv4"]
-[ext_resource type="Script" path="res://types/droppable.gd" id="10_l6h85"]
-[ext_resource type="Script" path="res://types/hierarchical_card_stack_ui.gd" id="14_rgwli"]
+[ext_resource type="Script" path="res://types/dealer.gd" id="1_4jtvl"]
+[ext_resource type="Script" path="res://types/empty_spot.gd" id="2_yifio"]
+[ext_resource type="Script" path="res://types/full_card_stack_ui.gd" id="3_xugq4"]
+[ext_resource type="Script" path="res://types/clickable.gd" id="4_klxqk"]
+[ext_resource type="Shape2D" uid="uid://b53kt7hfoptw0" path="res://resources/standard_collision_rectangle.tres" id="5_7tjoe"]
+[ext_resource type="Script" path="res://types/card_counter.gd" id="6_mtdof"]
+[ext_resource type="Script" path="res://test/card_stack_ui/EndPile.gd" id="7_l8xok"]
+[ext_resource type="Script" path="res://types/card_stack_ui.gd" id="8_ep2f1"]
+[ext_resource type="PackedScene" uid="uid://dmrefjqqgcpol" path="res://scenes/build_pile.tscn" id="9_ovmvl"]
+[ext_resource type="Script" path="res://test/card_stack_ui/SinkPile.gd" id="10_daqt6"]
+[ext_resource type="Script" path="res://types/droppable.gd" id="11_al4dr"]
+[ext_resource type="Script" path="res://test/card_stack_ui/HierarchyPile.gd" id="12_4fdiq"]
+[ext_resource type="Script" path="res://types/hierarchical_card_stack_ui.gd" id="13_wpjg6"]
+[ext_resource type="Script" path="res://test/card_stack_ui/DebugUI.gd" id="14_t3xyq"]
 
 [node name="TestCardUI" type="Node2D"]
 metadata/_edit_lock_ = true
 
 [node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack", "clickable")]
 position = Vector2(50, 80)
-script = ExtResource("2_rbqph")
+script = ExtResource("1_4jtvl")
 deck = NodePath("DeckPile/FullCardStackUI")
 stack = NodePath("EndPile/CardStackUI")
 clickable = NodePath("DeckPile/Clickable")
@@ -31,99 +32,100 @@ position = Vector2(50, 70)
 metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="Dealer/DeckPile"]
-script = ExtResource("2_wqwfg")
+script = ExtResource("2_yifio")
 type = 6
 metadata/_edit_lock_ = true
 
 [node name="FullCardStackUI" type="Node2D" parent="Dealer/DeckPile"]
-script = ExtResource("5_i2bob")
+script = ExtResource("3_xugq4")
 
 [node name="Clickable" type="Area2D" parent="Dealer/DeckPile"]
-script = ExtResource("4_uu4d4")
+script = ExtResource("4_klxqk")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Dealer/DeckPile/Clickable"]
-shape = ExtResource("5_rqi81")
+shape = ExtResource("5_7tjoe")
 metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="Dealer/DeckPile"]
-script = ExtResource("6_gmpji")
+script = ExtResource("6_mtdof")
 metadata/_edit_lock_ = true
 
 [node name="EndPile" type="Node2D" parent="Dealer"]
 unique_name_in_owner = true
 position = Vector2(200, 70)
-script = ExtResource("6_3egg2")
+script = ExtResource("7_l8xok")
 metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="Dealer/EndPile"]
-script = ExtResource("2_wqwfg")
+script = ExtResource("2_yifio")
 type = 7
 metadata/_edit_lock_ = true
 
 [node name="CardStackUI" type="Node2D" parent="Dealer/EndPile"]
-script = ExtResource("3_1euxr")
+script = ExtResource("8_ep2f1")
 open = true
 metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="Dealer/EndPile"]
-script = ExtResource("6_gmpji")
+script = ExtResource("6_mtdof")
 metadata/_edit_lock_ = true
 
-[node name="BuildPile" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("8_e2exb")]
+[node name="BuildPile" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
 position = Vector2(400, 150)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
 initial_number_of_cards = 3
 
 [node name="SinkPile" type="Node2D" parent="."]
 position = Vector2(249, 325)
-script = ExtResource("9_k7kv4")
+script = ExtResource("10_daqt6")
 metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="SinkPile"]
-script = ExtResource("2_wqwfg")
+script = ExtResource("2_yifio")
 type = 2
 color = Color(0.890196, 0.00784314, 0.14902, 1)
 metadata/_edit_lock_ = true
 
 [node name="Droppable" type="Area2D" parent="SinkPile" node_paths=PackedStringArray("control_node")]
-script = ExtResource("10_l6h85")
+script = ExtResource("11_al4dr")
 control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SinkPile/Droppable"]
-shape = ExtResource("5_rqi81")
+shape = ExtResource("5_7tjoe")
 metadata/_edit_lock_ = true
 
 [node name="CardStackUI" type="Node2D" parent="SinkPile"]
-script = ExtResource("3_1euxr")
+script = ExtResource("8_ep2f1")
 open = true
 metadata/_edit_lock_ = true
 
 [node name="HierarchyPile" type="Node2D" parent="."]
 position = Vector2(650, 150)
+script = ExtResource("12_4fdiq")
 
 [node name="EmptySpot" type="Node2D" parent="HierarchyPile"]
-script = ExtResource("2_wqwfg")
+script = ExtResource("2_yifio")
 type = 1
 color = Color(0.458824, 0.00784314, 0.513726, 1)
 
 [node name="HierarchicalCardStackUI" type="Node2D" parent="HierarchyPile"]
-script = ExtResource("14_rgwli")
+script = ExtResource("13_wpjg6")
 open = true
 metadata/_edit_lock_ = true
 
 [node name="Droppable" type="Area2D" parent="HierarchyPile" node_paths=PackedStringArray("control_node")]
-script = ExtResource("10_l6h85")
+script = ExtResource("11_al4dr")
 control_node = NodePath("..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HierarchyPile/Droppable"]
-shape = ExtResource("5_rqi81")
+shape = ExtResource("5_7tjoe")
 metadata/_edit_lock_ = true
 
 [node name="DebugUI" type="CanvasLayer" parent="."]
-script = ExtResource("8_f8pom")
+script = ExtResource("14_t3xyq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DebugUI"]
 anchors_preset = 15

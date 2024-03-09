@@ -23,7 +23,7 @@ func _ready():
 func detach_from_current_card():
 	if not current_card:
 		return
-	#print("Detaching %s from %s" % [get_path().get_name(3), current_card])
+	print("Detaching %s from %s" % [get_path().get_name(3), current_card])
 	# Move back home, adopting the home position
 	reparent(home_node, false)
 	# Disconnect the signals
@@ -52,7 +52,7 @@ func attach_to_card(card: CardUI):
 	# Activate the droppable
 	droppable.control_node = card
 	droppable.active = true
-	#print("Attached %s to %s" % [get_path().get_name(3), current_card])
+	print("Attached %s to %s" % [get_path().get_name(3), current_card])
 
 
 func _on_start_drag():
@@ -74,26 +74,25 @@ func _on_card_dropped(node: Node2D):
 ## This can only happen when we're currently attached to a 
 ## CardUI instance as a parent.
 func _can_receive_drop(node: Node2D) -> bool:
+	#print("_can_receive_drop(%s)" % node)
 	if not droppable.active:
 		return false
 	
-	# FIXME TODO FIXME
-	# Because of animations, we could be active while we're still moving.
-	# I _should_ fix that, and will, at some point in the future
-	# by keeping move state.
-	# For now, I am going to check whether I am "close to" the home node.
-	if global_position.distance_squared_to(home_node.global_position) > 5 * 5:
+	if not node is CardUI:
 		return false
 	
-	if not node is CardUI:
+	# If we're still moving somewhere, don't do anything
+	# TODO should this rather be done with signals and ative?
+	if (droppable.control_node as CardUI).moving:
 		return false
 		
 	# This is probably not needed, but maybe a bit more efficient
 	if not (node as CardUI).draggable.dragging:
 		return false
-		
+	
 	var drag_card := (node as CardUI).card
 	var drop_card := (get_parent() as CardUI).card
+	#print("Comparing %s and %s" % [drag_card, drop_card])
 	if drag_card.is_previous_rb(drop_card):
 		return true
 

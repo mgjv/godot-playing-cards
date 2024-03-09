@@ -86,7 +86,7 @@ func _on_open_cards_stack_changed(_added: bool):
 			card.draggable.active = true
 			card.open()
 	else:
-		# The top card actively listenm for drops
+		# The top card actively listen for drops
 		card_droppable.attach_to_card(open.top_card())
 
 
