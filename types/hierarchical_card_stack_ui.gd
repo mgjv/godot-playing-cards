@@ -39,13 +39,14 @@ extends CardStackUI
 # This returns how many children we now have
 func _add_card_as_child_and_move(card):
 	var top = _hierarchy_top()
+	var pre_drop_size = size()
 	#var append_to: Node2D = top_card() if get_child_count() else self
 	if card.get_parent():
 		card.reparent(top, true)
 	else:
 		top.add_child(card)
 	
-	card.move_to(global_position + offset * (size() - 1))
+	card.move_to(global_position + offset * (pre_drop_size))
 
 
 # This returns the top of the hierarchy, which is

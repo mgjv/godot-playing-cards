@@ -7,7 +7,7 @@ extends Node2D
 		source_deck = s
 		update_configuration_warnings()
 
-@export var initial_number_of_cards := 1
+@export var initial_number_of_cards := 0
 
 @onready var closed: CardStackUI = $ClosedCards
 @onready var open:   CardStackUI = $OpenCards

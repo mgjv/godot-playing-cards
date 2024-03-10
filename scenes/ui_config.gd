@@ -54,8 +54,6 @@ var flip_animation_speed_scale: float:
 
 ## Size of a card
 const CARD_SIZE := Vector2(100, 140)
-## Centre position of a card
-const CARD_CENTRE := CARD_SIZE/2
 
 
 ## Set up all debug nodes (identified by DEBUG_GROUP)

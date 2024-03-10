@@ -14,11 +14,13 @@ extends Node2D
 var label: Label
 
 func _ready():
-	# We're a debug node
+	# We're a debug node, so we don't need to exist elsewhere
 	if not OS.is_debug_build():
-		queue_redraw()
+		queue_free()
 		return
+
 	add_to_group(UIConfig.DEBUG_GROUP)
+	visible = UIConfig.debug
 	
 	if not stack:
 		# Look for a CardStackUI sibling
@@ -35,9 +37,8 @@ func _ready():
 	
 	_add_label()
 	
-	#print("Counting children of %s" % node_to_count.get_path())
-	stack.child_entered_tree.connect(_on_child_entered)
-	stack.child_exiting_tree.connect(_on_child_exiting)
+	#print("Counting cards on %s" % stack.get_path())
+	stack.stack_changed.connect(_on_stack_changed)
 
 
 func _add_label():
@@ -51,20 +52,14 @@ func _add_label():
 	add_child(label)
 	
 	# place the label at the top left corner, aligned for top right text
-	label.position -= UIConfig.CARD_CENTRE
+	label.position -= UIConfig.CARD_SIZE/2
 	label.position += offset
-	label.position.x -= label_bounds.x + 2
+	label.position.x -= label_bounds.x + 2 # margin
 
 
 func _set_count(count: int):
 	label.text = "%d" % count
 
 
-func _on_child_entered(_node: Node):
-	# The child has already entered the tree
+func _on_stack_changed(_added: bool):
 	_set_count(stack.size())
-
-
-func _on_child_exiting(_node: Node):
-	# The child is _about to_ leave the node
-	_set_count(stack.size() - 1)

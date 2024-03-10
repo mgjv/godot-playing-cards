@@ -93,6 +93,7 @@ func cards() -> Array[CardUI]:
 		_cards.append(n)
 	return _cards
 
+
 ## Returns true is the given card is in this stack
 ##
 func has_card(card: CardUI) -> bool:

@@ -18,6 +18,26 @@
 [node name="TestCardUI" type="Node2D"]
 metadata/_edit_lock_ = true
 
+[node name="DebugUI" type="CanvasLayer" parent="."]
+visible = false
+script = ExtResource("14_t3xyq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DebugUI/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="NewDeckButton" type="Button" parent="DebugUI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "NEW DECK"
+
 [node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack", "clickable")]
 position = Vector2(50, 80)
 script = ExtResource("1_4jtvl")
@@ -71,13 +91,17 @@ metadata/_edit_lock_ = true
 script = ExtResource("6_mtdof")
 metadata/_edit_lock_ = true
 
-[node name="BuildPile" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
+[node name="BuildPile1" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
 position = Vector2(400, 150)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
-initial_number_of_cards = 3
+initial_number_of_cards = 5
+
+[node name="BuildPile2" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
+position = Vector2(550, 150)
+source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
 
 [node name="SinkPile" type="Node2D" parent="."]
-position = Vector2(249, 325)
+position = Vector2(250, 325)
 script = ExtResource("10_daqt6")
 metadata/_edit_lock_ = true
 
@@ -101,14 +125,18 @@ script = ExtResource("8_ep2f1")
 open = true
 metadata/_edit_lock_ = true
 
+[node name="CardCounter" type="Node2D" parent="SinkPile"]
+script = ExtResource("6_mtdof")
+
 [node name="HierarchyPile" type="Node2D" parent="."]
-position = Vector2(650, 150)
+position = Vector2(700, 150)
 script = ExtResource("12_4fdiq")
 
 [node name="EmptySpot" type="Node2D" parent="HierarchyPile"]
 script = ExtResource("2_yifio")
-type = 1
+type = 4
 color = Color(0.458824, 0.00784314, 0.513726, 1)
+metadata/_edit_lock_ = true
 
 [node name="HierarchicalCardStackUI" type="Node2D" parent="HierarchyPile"]
 script = ExtResource("13_wpjg6")
@@ -124,25 +152,37 @@ metadata/_edit_lock_ = true
 shape = ExtResource("5_7tjoe")
 metadata/_edit_lock_ = true
 
-[node name="DebugUI" type="CanvasLayer" parent="."]
-script = ExtResource("14_t3xyq")
+[node name="CardCounter" type="Node2D" parent="HierarchyPile"]
+script = ExtResource("6_mtdof")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 2
+[node name="HierarchyPile2" type="Node2D" parent="."]
+position = Vector2(850, 150)
+script = ExtResource("12_4fdiq")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DebugUI/VBoxContainer"]
-layout_mode = 2
-alignment = 1
+[node name="EmptySpot" type="Node2D" parent="HierarchyPile2"]
+script = ExtResource("2_yifio")
+type = 4
+color = Color(0.458824, 0.00784314, 0.513726, 1)
+metadata/_edit_lock_ = true
 
-[node name="NewDeckButton" type="Button" parent="DebugUI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "NEW DECK"
+[node name="HierarchicalCardStackUI" type="Node2D" parent="HierarchyPile2"]
+script = ExtResource("13_wpjg6")
+open = true
+metadata/_edit_lock_ = true
 
+[node name="Droppable" type="Area2D" parent="HierarchyPile2" node_paths=PackedStringArray("control_node")]
+script = ExtResource("11_al4dr")
+control_node = NodePath("..")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HierarchyPile2/Droppable"]
+shape = ExtResource("5_7tjoe")
+metadata/_edit_lock_ = true
+
+[node name="CardCounter" type="Node2D" parent="HierarchyPile2"]
+script = ExtResource("6_mtdof")
+
+[connection signal="pressed" from="DebugUI/VBoxContainer/HBoxContainer/NewDeckButton" to="DebugUI" method="_on_new_deck_button_pressed"]
 [connection signal="received_drop" from="SinkPile/Droppable" to="SinkPile" method="_on_droppable_received_drop"]
 [connection signal="received_drop" from="HierarchyPile/Droppable" to="HierarchyPile" method="_on_droppable_received_drop"]
-[connection signal="pressed" from="DebugUI/VBoxContainer/HBoxContainer/NewDeckButton" to="DebugUI" method="_on_new_deck_button_pressed"]
+[connection signal="received_drop" from="HierarchyPile2/Droppable" to="HierarchyPile2" method="_on_droppable_received_drop"]

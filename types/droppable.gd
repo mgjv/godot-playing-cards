@@ -72,6 +72,10 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 	
+	if OS.is_debug_build():
+		if not control_node.is_ancestor_of(self):
+			push_warning("Possible problem: %s is not an ancestor of %s." % [control_node, self])
+	
 	# Add ourselves to pur group and the global; list of droppables
 	add_to_group(GROUP, true)
 

@@ -79,6 +79,10 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 	
+	if OS.is_debug_build():
+		if not control_node.is_ancestor_of(self):
+			print_debug("Possible problem: %s is not an ancestor of %s." % [control_node, self])
+
 	# Add ourselves to pur group
 	add_to_group(GROUP, true)
 

@@ -32,8 +32,9 @@ script = ExtResource("6_tmtpw")
 stack = NodePath("../ClosedCards")
 metadata/_edit_lock_ = true
 
-[node name="OpenCardsCounter" type="Node2D" parent="."]
+[node name="OpenCardsCounter" type="Node2D" parent="." node_paths=PackedStringArray("stack")]
 script = ExtResource("6_tmtpw")
+stack = NodePath("../OpenCards")
 offset = Vector2(0, 25)
 metadata/_edit_lock_ = true
 
