@@ -1,11 +1,13 @@
-extends Node2D
+@tool
+#class_name BuildPileCardDroppable
+extends Droppable
 
-# The CardDroppable container starts out, and firmly belongs to
+# The CardDroppable starts out, and firmly belongs to
 # the BuildPile. However, during operation, it will be 
 # attached to (made a child of) whatever the top open card 
-# on the pile is, so that we can properly 
-
-@onready var droppable: Droppable = $Droppable
+# on the pile is, so that we can properly process the drops 
+# on the stack, which will only happen on the root, or on the top
+# card.
 
 ## Where do we start life, so that we can return there when 
 ## we need to
@@ -14,16 +16,21 @@ var current_card: CardUI
 
 
 func _ready():
-	home_node = get_parent()
-	droppable.active = false
-	droppable._override_can_receive = _can_receive_drop
+	super._ready()
+	
+	if Engine.is_editor_hint():
+		return
+		
+	home_node = control_node
+	active = false
+	_override_can_receive = _can_receive_drop
 
 
 ## Go back to the home node and go to sleep
 func detach_from_current_card():
 	if not current_card:
 		return
-	print("Detaching %s from %s" % [get_path().get_name(3), current_card])
+	#print("Detaching %s from %s" % [name, current_card])
 	# Move back home, adopting the home position
 	reparent(home_node, false)
 	# Disconnect the signals
@@ -32,8 +39,8 @@ func detach_from_current_card():
 	current_card.draggable.dropped.disconnect(_on_card_dropped)
 	current_card = null
 	# Deativate the droppable
-	droppable.control_node = home_node
-	droppable.active = false
+	control_node = home_node
+	active = false
 
 
 ## Attach to the given card and listen for drop events
@@ -50,16 +57,16 @@ func attach_to_card(card: CardUI):
 	current_card.draggable.stop_drag.connect(_on_stop_drag)
 	current_card.draggable.dropped.connect(_on_card_dropped)
 	# Activate the droppable
-	droppable.control_node = card
-	droppable.active = true
-	print("Attached %s to %s" % [get_path().get_name(3), current_card])
+	control_node = card
+	active = true
+	#print("Attached %s to %s" % [name, current_card])
 
 
 func _on_start_drag():
-	droppable.active = false
+	active = false
 
 func _on_stop_drag():
-	droppable.active = true
+	active = true
 
 func _on_card_dropped(node: Node2D):
 	if node == self:
@@ -68,14 +75,17 @@ func _on_card_dropped(node: Node2D):
 	if node:
 		detach_from_current_card()
 
-
+# TODO: Now that we inherit direct\ly from Droppable
+# We should be able to simply override Droppable.can_receive
+# instead of using this mechanism
+#
 ## This gets called to work out whether we can receive a drop
 ## 
 ## This can only happen when we're currently attached to a 
 ## CardUI instance as a parent.
 func _can_receive_drop(node: Node2D) -> bool:
 	#print("_can_receive_drop(%s)" % node)
-	if not droppable.active:
+	if not active:
 		return false
 	
 	if not node is CardUI:
@@ -83,7 +93,7 @@ func _can_receive_drop(node: Node2D) -> bool:
 	
 	# If we're still moving somewhere, don't do anything
 	# TODO should this rather be done with signals and ative?
-	if (droppable.control_node as CardUI).moving:
+	if (control_node as CardUI).moving:
 		return false
 		
 	# This is probably not needed, but maybe a bit more efficient

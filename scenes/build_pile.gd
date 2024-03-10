@@ -70,7 +70,7 @@ func _can_receive_drop(node: Node2D):
 
 ## Called when a card is dropped on either the 
 ## empty stack, or the top card.
-func _on_received_drop(node):
+func _on_received_drop(node: Node2D):
 	var card: CardUI = node as CardUI
 	open.add_card(card)
 
