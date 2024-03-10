@@ -23,3 +23,9 @@ nice results.
 - Various TODO items all over the code
 - Move control over whether card is open or closed to CardStackUI
   as stacks should either be fully open or fully closed
+- Add clickable to dealer stack
+- Double click to move card to Ace pile
+
+## Bugs?
+
+

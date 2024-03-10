@@ -30,7 +30,7 @@ func _ready():
 func detach_from_current_card():
 	if not current_card:
 		return
-	#print("Detaching %s from %s" % [name, current_card])
+	#print("%s/CardDroppable detached from %s" % [home_node.name, current_card])
 	# Move back home, adopting the home position
 	reparent(home_node, false)
 	# Disconnect the signals
@@ -59,7 +59,7 @@ func attach_to_card(card: CardUI):
 	# Activate the droppable
 	control_node = card
 	active = true
-	#print("Attached %s to %s" % [name, current_card])
+	#print("%s/CardDroppable attached to %s" % [home_node.name, current_card])
 
 
 func _on_start_drag():
@@ -74,6 +74,7 @@ func _on_card_dropped(node: Node2D):
 	# Only detach if we're not dropped on nothing
 	if node:
 		detach_from_current_card()
+
 
 # TODO: Now that we inherit direct\ly from Droppable
 # We should be able to simply override Droppable.can_receive

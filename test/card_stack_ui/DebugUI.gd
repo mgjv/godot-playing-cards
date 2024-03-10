@@ -22,3 +22,6 @@ func _on_new_deck_button_pressed():
 	deck.add_full_deck()
 	for build_pile: BuildPile in get_tree().get_nodes_in_group(BuildPile.GROUP):
 		build_pile._take_initial_cards()
+	
+	# FIXME
+	get_parent().setup()

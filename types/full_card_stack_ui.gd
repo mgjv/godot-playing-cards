@@ -1,7 +1,7 @@
 class_name FullCardStackUI
 extends CardStackUI
 
-## A [CardStackUI] that can be fil;led with a full deck
+## A [CardStackUI] that can be filled with a full deck
 
 ## Whether this stack should initialise itself with a full randomised deck
 ##
@@ -11,6 +11,7 @@ extends CardStackUI
 
 func _ready():
 	super._ready()
+	print("_ready for %s" % get_path())
 	if initialise_full_deck:
 		add_full_deck()
 

@@ -94,5 +94,13 @@ func is_previous_rb(other: Card, ace_is_low = true) -> bool:
 	return other.is_next_rb(self, ace_is_low)
 
 
+## Returns true if this card is the same as the given one
+func is_same_as(card: Card) -> bool:
+	if suit == card.suit and value == card.value:
+		return true
+	else:
+		return false
+
+
 func _to_string() -> String:
 	return VALUES.keys()[value - VALUES.ace] + " of " + SUITS.keys()[suit]

@@ -37,14 +37,21 @@ extends CardStackUI
 # this is a separate function so it can be easily overriden
 #
 # This returns how many children we now have
-func _add_card_as_child_and_move(card):
+func _add_card_as_child_and_move(card: CardUI):
 	var top = _hierarchy_top()
 	var pre_drop_size = size()
-	#var append_to: Node2D = top_card() if get_child_count() else self
 	if card.get_parent():
+		#print("Reparenting card %s to %s (%d)" %[card, top, pre_drop_size])
 		card.reparent(top, true)
 	else:
+		#print("Adding card %s to %s (%d)" %[card, top, pre_drop_size])
 		top.add_child(card)
+	
+	# FIXME
+	# The responsibility for this for this card lies with the 
+	# superclass, so it's icky that I'm doing it here
+	for c in card.flatten_child_cards():
+		c.stack = self
 	
 	card.move_to(global_position + offset * (pre_drop_size))
 
@@ -70,7 +77,6 @@ func _append_next_card(card: CardUI, out: Array[CardUI]):
 	out.append(card)
 
 
-
 func size() -> int:
 	return cards().size()
 
@@ -87,3 +93,5 @@ func _get_top_card(card: CardUI) -> CardUI:
 		return card
 	else:
 		return _get_top_card(card.get_child_cards()[0])
+		
+

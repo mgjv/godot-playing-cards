@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://cu58tpewaxoyb"]
+[gd_scene load_steps=17 format=3 uid="uid://cu58tpewaxoyb"]
 
 [ext_resource type="Script" path="res://types/dealer.gd" id="1_4jtvl"]
+[ext_resource type="Script" path="res://test/card_stack_ui/TestCardStackUI.gd" id="1_nmuyj"]
 [ext_resource type="Script" path="res://types/empty_spot.gd" id="2_yifio"]
 [ext_resource type="Script" path="res://types/full_card_stack_ui.gd" id="3_xugq4"]
 [ext_resource type="Script" path="res://types/clickable.gd" id="4_klxqk"]
@@ -14,8 +15,10 @@
 [ext_resource type="Script" path="res://test/card_stack_ui/HierarchyPile.gd" id="12_4fdiq"]
 [ext_resource type="Script" path="res://types/hierarchical_card_stack_ui.gd" id="13_wpjg6"]
 [ext_resource type="Script" path="res://test/card_stack_ui/DebugUI.gd" id="14_t3xyq"]
+[ext_resource type="PackedScene" uid="uid://nhc2no6rgyca" path="res://scenes/ace_pile.tscn" id="15_jx6a1"]
 
 [node name="TestCardUI" type="Node2D"]
+script = ExtResource("1_nmuyj")
 metadata/_edit_lock_ = true
 
 [node name="DebugUI" type="CanvasLayer" parent="."]
@@ -38,8 +41,24 @@ alignment = 1
 layout_mode = 2
 text = "NEW DECK"
 
+[node name="AcePile1" parent="." instance=ExtResource("15_jx6a1")]
+position = Vector2(250, 100)
+metadata/_edit_lock_ = true
+
+[node name="AcePile2" parent="." instance=ExtResource("15_jx6a1")]
+position = Vector2(400, 100)
+metadata/_edit_lock_ = true
+
+[node name="AcePile3" parent="." instance=ExtResource("15_jx6a1")]
+position = Vector2(550, 100)
+metadata/_edit_lock_ = true
+
+[node name="AcePile4" parent="." instance=ExtResource("15_jx6a1")]
+position = Vector2(700, 100)
+metadata/_edit_lock_ = true
+
 [node name="Dealer" type="Node2D" parent="." node_paths=PackedStringArray("deck", "stack", "clickable")]
-position = Vector2(50, 80)
+position = Vector2(50, 200)
 script = ExtResource("1_4jtvl")
 deck = NodePath("DeckPile/FullCardStackUI")
 stack = NodePath("EndPile/CardStackUI")
@@ -58,6 +77,7 @@ metadata/_edit_lock_ = true
 
 [node name="FullCardStackUI" type="Node2D" parent="Dealer/DeckPile"]
 script = ExtResource("3_xugq4")
+metadata/_edit_lock_ = true
 
 [node name="Clickable" type="Area2D" parent="Dealer/DeckPile"]
 script = ExtResource("4_klxqk")
@@ -92,16 +112,21 @@ script = ExtResource("6_mtdof")
 metadata/_edit_lock_ = true
 
 [node name="BuildPile1" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
-position = Vector2(400, 150)
+position = Vector2(400, 270)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
-initial_number_of_cards = 5
 
 [node name="BuildPile2" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
-position = Vector2(550, 150)
+position = Vector2(550, 270)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
+initial_number_of_cards = 2
+
+[node name="BuildPile3" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
+position = Vector2(700, 270)
+source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
+initial_number_of_cards = 4
 
 [node name="SinkPile" type="Node2D" parent="."]
-position = Vector2(250, 325)
+position = Vector2(250, 450)
 script = ExtResource("10_daqt6")
 metadata/_edit_lock_ = true
 
@@ -127,10 +152,13 @@ metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="SinkPile"]
 script = ExtResource("6_mtdof")
+metadata/_edit_lock_ = true
 
 [node name="HierarchyPile" type="Node2D" parent="."]
-position = Vector2(700, 150)
+visible = false
+position = Vector2(400, 2500)
 script = ExtResource("12_4fdiq")
+metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="HierarchyPile"]
 script = ExtResource("2_yifio")
@@ -154,10 +182,13 @@ metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="HierarchyPile"]
 script = ExtResource("6_mtdof")
+metadata/_edit_lock_ = true
 
 [node name="HierarchyPile2" type="Node2D" parent="."]
-position = Vector2(850, 150)
+visible = false
+position = Vector2(550, 2500)
 script = ExtResource("12_4fdiq")
+metadata/_edit_lock_ = true
 
 [node name="EmptySpot" type="Node2D" parent="HierarchyPile2"]
 script = ExtResource("2_yifio")
@@ -181,6 +212,7 @@ metadata/_edit_lock_ = true
 
 [node name="CardCounter" type="Node2D" parent="HierarchyPile2"]
 script = ExtResource("6_mtdof")
+metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="DebugUI/VBoxContainer/HBoxContainer/NewDeckButton" to="DebugUI" method="_on_new_deck_button_pressed"]
 [connection signal="received_drop" from="SinkPile/Droppable" to="SinkPile" method="_on_droppable_received_drop"]

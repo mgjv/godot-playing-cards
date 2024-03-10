@@ -6,7 +6,10 @@ extends Node2D
 # Called to check whether we're happy to receive a drop
 func _can_receive_drop(node: Node2D) -> bool:
 	if not node is CardUI:
-		return false 
+		return false
+	
+	if (node as CardUI).has_child_card():
+		return false
 	
 	var card: Card = node.card
 	if stack.size() == 0:

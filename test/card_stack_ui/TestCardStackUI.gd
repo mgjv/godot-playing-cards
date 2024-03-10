@@ -1,21 +1,15 @@
 extends Node2D
 
-func _ready():
-	# Because we're loaded after UIConfig, we have to invoke its debug method
-	UIConfig.setup_debug_nodes()
-	#setup()
-
-
-
-#++++++++++++++++++++++++++++++++++++++++++++++
-# DEBUG CODE TO BE DELETED
-# ++++++++++++++++++++++++++++++++++++++++++++++
-
 @onready var source: CardStackUI = $Dealer/DeckPile/FullCardStackUI
 
+
+func _ready():
+	print("_ready for %s" % name)
+	setup()
+	
+	
 # Separate function so I can call it from the DebugUI
 func setup():
-	return
 	# FIXME There is a weird race condition somewhere that 
 	# means adding _multiple_ cards to a hierarchical stack from here
 	# means they end up in the wrong position. 
@@ -27,6 +21,7 @@ func setup():
 	UIConfig.move_animation_duration = 1.0
 	setup_scenario_swap_red_four()
 	UIConfig.move_animation_duration = old_move_animation_duration
+	
 
 
 # Reported:
@@ -39,23 +34,23 @@ func setup_scenario_swap_red_four():
 	# Set up an acepile with the first three hearts
 	for val in [Card.VALUES.ace, Card.VALUES.two, Card.VALUES.three]:
 		card = Card.new(Card.SUITS.hearts, val)
-		deal_card_to(card, $AcePiles/AcePile1/CardStackUI)
+		deal_card_to(card, $AcePile1/CardStackUI)
 	
 	# Set up a build pile with a 4 we can drop
 	card = Card.new(Card.SUITS.spades, Card.VALUES.five)
-	deal_card_to(card, $BuildPiles/BuildPile1/OpenCards)
+	deal_card_to(card, $BuildPile1/OpenCards)
 	card = Card.new(Card.SUITS.hearts, Card.VALUES.four)
-	deal_card_to(card, $BuildPiles/BuildPile1/OpenCards)
+	deal_card_to(card, $BuildPile1/OpenCards)
 	card = Card.new(Card.SUITS.spades, Card.VALUES.three)
-	deal_card_to(card, $BuildPiles/BuildPile1/OpenCards)
+	deal_card_to(card, $BuildPile1/OpenCards)
 	
 	card = Card.new(Card.SUITS.clubs, Card.VALUES.five)
-	deal_card_to(card, $BuildPiles/BuildPile2/OpenCards)
+	deal_card_to(card, $BuildPile2/OpenCards)
 	
 	
 	# Make sure we have the other red four available
 	card = Card.new(Card.SUITS.diamonds, Card.VALUES.four)
-	deal_card_to(card, $BuildPiles/BuildPile3/OpenCards)
+	deal_card_to(card, $SinkPile/CardStackUI)
 
 
 # This is a naughty test function that fiddles with the internals

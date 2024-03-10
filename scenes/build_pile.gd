@@ -26,6 +26,10 @@ func _ready():
 		return
 	
 	add_to_group(GROUP)
+	
+	# Wait until the source deck is ready
+	if not source_deck.is_node_ready():
+		await source_deck.ready
 	_take_initial_cards()
 
 

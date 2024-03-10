@@ -81,3 +81,9 @@ static func top_canvas_item(nodes: Array[Variant]) -> CanvasItem:
 	cis.sort_custom(Util.cmp_render_order)
 	return cis[0] if cis else null
 
+
+
+static func trimmed_path(node: Node) -> String:
+	var path := node.get_path().get_concatenated_names()
+	var trim_parts := path.split('/').slice(-2)
+	return "/".join(trim_parts)

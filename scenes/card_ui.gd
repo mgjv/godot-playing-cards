@@ -52,11 +52,11 @@ func _ready():
 ## This is controlled by the draggable, so see the configuration
 ## of the animation over there.
 func move_to(pos: Vector2):
-	#print("Start move")
+	#print("%s start move to %s" % [self, pos])
 	moving = true
 	await draggable.move_to(pos)
 	moving = false
-	#print("End move")
+	#print("%s end move at %s" % [self, global_position])
 
 # --- VISUAL STUFF -----
 
@@ -118,9 +118,22 @@ func is_in_stack(s: CardStackUI) -> bool:
 ## Used by the hierarchical card stacks
 func get_child_cards() -> Array[CardUI]:
 	var out: Array[CardUI] = []
-	for c in get_children().filter(func(n): return n is CardUI):
+	for c : CardUI in get_children().filter(func(n): return n is CardUI):
 		out.append(c)
 	return out
+
+
+func flatten_child_cards() -> Array[CardUI]:
+	var out : Array[CardUI] = []
+	_flatten_child_cards(self, out)
+	return out
+
+
+# Start at a card, and return it, and all its children as a flat list
+func _flatten_child_cards(c: CardUI, out: Array[CardUI]):
+	out.append(c)
+	for child: CardUI in c.get_child_cards():
+		_flatten_child_cards(child, out)
 
 
 ## Does this card have child cards?
