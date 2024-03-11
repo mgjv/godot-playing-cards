@@ -118,12 +118,10 @@ source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
 [node name="BuildPile2" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
 position = Vector2(550, 270)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
-initial_number_of_cards = 2
 
 [node name="BuildPile3" parent="." node_paths=PackedStringArray("source_deck") instance=ExtResource("9_ovmvl")]
 position = Vector2(700, 270)
 source_deck = NodePath("../Dealer/DeckPile/FullCardStackUI")
-initial_number_of_cards = 4
 
 [node name="SinkPile" type="Node2D" parent="."]
 position = Vector2(250, 450)

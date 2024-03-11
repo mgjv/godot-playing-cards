@@ -3,6 +3,7 @@ extends Node2D
 
 @onready var stack: CardStackUI = $CardStackUI
 
+
 # Called to check whether we're happy to receive a drop
 func _can_receive_drop(node: Node2D) -> bool:
 	if not node is CardUI:
@@ -21,6 +22,7 @@ func _can_receive_drop(node: Node2D) -> bool:
 			return true
 	
 	return false
+
 
 # Called to actually receive the drop
 func _on_received_drop(node: Node2D):

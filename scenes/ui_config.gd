@@ -56,6 +56,11 @@ var flip_animation_speed_scale: float:
 const CARD_SIZE := Vector2(100, 140)
 
 
+func _ready():
+	await get_tree().current_scene.ready
+	setup_debug_nodes()
+
+
 ## Set up all debug nodes (identified by DEBUG_GROUP)
 ## according to current settings
 func setup_debug_nodes():

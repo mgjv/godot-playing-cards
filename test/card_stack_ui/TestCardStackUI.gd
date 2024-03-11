@@ -19,15 +19,15 @@ func setup():
 	# So, we temporarily set that to (close to) 0
 	var old_move_animation_duration = UIConfig.move_animation_duration
 	UIConfig.move_animation_duration = 1.0
-	setup_scenario_swap_red_four()
+	#setup_scenario_swap_red_four()
 	UIConfig.move_animation_duration = old_move_animation_duration
-	
 
 
 # Reported:
 # - Dropped a red four from a black five from the build pile onto the ace pile
-#  and ended up not being able to drop the opther red four onto the
-# cnow exposed five.
+#   and ended up not being able to drop the opther red four onto the
+#   now exposed five.
+# - Fixed
 func setup_scenario_swap_red_four():
 	var card: Card
 	
@@ -46,7 +46,6 @@ func setup_scenario_swap_red_four():
 	
 	card = Card.new(Card.SUITS.clubs, Card.VALUES.five)
 	deal_card_to(card, $BuildPile2/OpenCards)
-	
 	
 	# Make sure we have the other red four available
 	card = Card.new(Card.SUITS.diamonds, Card.VALUES.four)

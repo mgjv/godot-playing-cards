@@ -9,6 +9,12 @@ extends Droppable
 # on the stack, which will only happen on the root, or on the top
 # card.
 
+# TODO: Should we simply always have a droppable attached to
+# a card, and interact with it instead? Means we'd have to 
+# activate and deactivate it, and connect signals correctly all the time
+# Not sure whether that is more or less work
+
+
 ## Where do we start life, so that we can return there when 
 ## we need to
 var home_node: Node2D
@@ -20,7 +26,8 @@ func _ready():
 	
 	if Engine.is_editor_hint():
 		return
-		
+	
+	# Save the originally configured control_node
 	home_node = control_node
 	active = false
 	_override_can_receive = _can_receive_drop

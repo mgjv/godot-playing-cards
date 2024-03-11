@@ -93,7 +93,8 @@ func _ready():
 # Allow can_receive to be overriddedn from outside of the 
 # control_node as well
 # TODO: This was a hack we needed for the CardDroppable, but
-# we should probably change it
+# we should probably change it to a "virtual" function
+# and simply override the behaviour in a derived script
 var _override_can_receive: Callable
 
 ## Determine whether this DragDropController can receive

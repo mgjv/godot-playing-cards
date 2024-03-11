@@ -2,6 +2,10 @@
 class_name Dealer
 extends Node2D
 
+# TODO This is all quite messy and ad-hoc. It would
+# probably be better if this were a scene, rather than 
+# a class trying to be generic
+
 ## Manage two piles for dealing
 ##
 ## Add this to your node tree. Configure a source deck 

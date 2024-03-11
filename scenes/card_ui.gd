@@ -6,6 +6,8 @@ extends Node2D
 ##
 ## A CardUI instance should pretty much always be in a
 ## stack, except immediately after instantiation.
+##
+## A CardUI instance can have CardUI children.
 
 @onready var front: AnimatedSprite2D = $Front
 @onready var back: Sprite2D = $Back
@@ -67,6 +69,7 @@ func move_to(pos: Vector2):
 # just incorrect  replays of animations
 func is_closed() -> bool:
 	return back.visible
+
 func is_open() -> bool:
 	return not is_closed()
 
@@ -109,6 +112,8 @@ func is_in_stack(s: CardStackUI) -> bool:
 # ----- even though we don't need them yet
 #
 # ----- These functions mirror some of the [Node] functions
+
+# TODO Clean this up!
 
 # For adding and removing, add_child() and remove_child() 
 # can be used. No special handling required

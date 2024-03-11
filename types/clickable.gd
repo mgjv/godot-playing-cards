@@ -56,6 +56,8 @@ func _input_event(_viewport, event, _shape_idx):
 		return
 		
 	# Process mouse buttons
+	# TODO WE should register a click when moved less than a 
+	# certain amount. 
 	if event is InputEventMouseButton:
 		if event.pressed:
 			mouse_down = true  
